@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, CloudUpload, LoaderCircle, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
+import { Check, CloudUpload, ExternalLink, LoaderCircle, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { SiteSettings } from "@/lib/site-settings";
@@ -342,6 +342,9 @@ export function AdminDashboard() {
                   {syncing ? <LoaderCircle className="admin-sync-spinner" size={16} /> : <CloudUpload size={16} />}
                   {isStaticExport ? "静态版不可用" : syncing ? "正在更新…" : "立即更新到 GitHub"}
                 </button>
+                <a className="button button-outline" href="https://wyf-cloud.github.io/software-showcase/" target="_blank" rel="noopener noreferrer">
+                  <ExternalLink size={16} />打开展示网页
+                </a>
                 <span className="admin-github-sync-hint">仅本机 Node.js 后台可用 · 提交信息：<code>chore: update website from admin</code></span>
               </div>
               {syncMessage && (
