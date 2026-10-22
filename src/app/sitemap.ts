@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { readSoftware } from "@/lib/software-settings";
 
-const baseUrl = "https://littleworks.example";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://littleworks.example";
 
 export const dynamic = "force-dynamic";
 

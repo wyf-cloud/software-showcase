@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowUpRight, Mail, MessageCircle, MoveUpRight, Send, ScanLine, Sparkles } from "lucide-react";
 import { readSiteSettings } from "@/lib/site-settings";
+import { withSiteBasePath } from "@/lib/site-path";
 
 export const metadata: Metadata = { title: "联系", description: "联系工作室，聊聊合作、反馈或下一个软件想法。" };
 
@@ -41,7 +42,7 @@ export default async function ContactPage() {
                 <span className="qr-corner qr-corner-br" />
                 <div className="qr-scan-line" />
                 <Image
-                  src="/images/wechat-contact-qr.jpg"
+                  src={withSiteBasePath("/images/wechat-contact-qr.jpg")}
                   alt="微信好友二维码，扫一扫添加好友"
                   width={691}
                   height={695}
@@ -73,5 +74,3 @@ export default async function ContactPage() {
     </main>
   );
 }
-
-

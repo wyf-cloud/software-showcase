@@ -3,6 +3,7 @@ import { ArrowUpRight, Check, Circle, Filter, Plus, Search, Sparkles } from "luc
 import type { Software } from "@/data/software";
 import { buildPreviewContent } from "@/lib/preview-content";
 import type { PreviewContent } from "@/lib/preview-content";
+import { withSiteBasePath } from "@/lib/site-path";
 
 type ProductVisualProps = {
   visual: Software["visual"];
@@ -28,10 +29,10 @@ export function ProductVisual({ visual, name, compact = false, imageUrl, feature
           <span className="featured-preview-label">界面预览</span>
         </div>
         <div className="featured-image-stage">
-          <div className="custom-product-image"><Image src={imageUrl} alt={`${name} 软件操作界面截图`} fill unoptimized sizes="(max-width: 700px) 92vw, (max-width: 1100px) 50vw, 42vw" /></div>
+          <div className="custom-product-image"><Image src={withSiteBasePath(imageUrl)} alt={`${name} 软件操作界面截图`} fill unoptimized sizes="(max-width: 700px) 92vw, (max-width: 1100px) 50vw, 42vw" /></div>
         </div>
         <div className="featured-image-caption"><span><i />真实操作界面</span><span>DESKTOP WORKSPACE</span></div>
-      </div> : <div className="custom-product-image"><Image src={imageUrl} alt={`${name} 产品展示图`} fill unoptimized sizes="(max-width: 700px) 92vw, (max-width: 1100px) 50vw, 42vw" /></div> : <div className="app-window preview-window">
+      </div> : <div className="custom-product-image"><Image src={withSiteBasePath(imageUrl)} alt={`${name} 产品展示图`} fill unoptimized sizes="(max-width: 700px) 92vw, (max-width: 1100px) 50vw, 42vw" /></div> : <div className="app-window preview-window">
         <div className="window-bar">
           <div className="window-dots"><i /><i /><i /></div>
           <span className="window-title">{name}</span>
@@ -162,6 +163,3 @@ function ReportPreview({ preview, compact }: { preview: PreviewContent; compact:
     </div>
   );
 }
-
-
-

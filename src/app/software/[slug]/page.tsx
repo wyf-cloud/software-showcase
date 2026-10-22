@@ -69,4 +69,3 @@ export default async function SoftwareDetailPage({ params }: Props) {
     </main>
   );
 }
-

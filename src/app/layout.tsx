@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await readSiteSettings();
   return {
-    metadataBase: new URL("https://littleworks.example"),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://littleworks.example"),
     title: { default: `${settings.siteName} — 独立软件作品集`, template: `%s — ${settings.siteName}` },
     description: settings.siteDescription,
     applicationName: settings.siteName,
@@ -45,4 +45,3 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     </html>
   );
 }
-
