@@ -82,6 +82,7 @@ export function AdminDashboard() {
   const [syncProgress, setSyncProgress] = useState(0);
   const [syncMessage, setSyncMessage] = useState("");
   const [syncDetails, setSyncDetails] = useState<string[]>([]);
+  const [syncResult, setSyncResult] = useState<"running" | "success" | "error" | null>(null);
 
   const loadSettings = useCallback(async (candidate: string) => {
     if (!candidate.trim()) {
@@ -165,6 +166,7 @@ export function AdminDashboard() {
     setSyncProgress(0);
     setSyncMessage("正在准备 GitHub 更新…");
     setSyncDetails([]);
+    setSyncResult("running");
     setStatus(null);
 
     try {
@@ -196,6 +198,7 @@ export function AdminDashboard() {
           if (event.detail) setSyncDetails((current) => [...current, event.detail!].slice(-6));
           if (event.type === "complete") {
             completed = true;
+            setSyncResult(event.success ? "success" : "error");
             setStatus({ type: event.success ? "success" : "error", message: event.message });
           }
         }
@@ -205,6 +208,7 @@ export function AdminDashboard() {
     } catch (error) {
       const message = error instanceof Error ? error.message : "GitHub 更新失败，请稍后重试。";
       setSyncMessage(message);
+      setSyncResult("error");
       setStatus({ type: "error", message });
     } finally {
       setSyncing(false);
@@ -345,10 +349,10 @@ export function AdminDashboard() {
                 <a className="button button-outline" href="https://wyf-cloud.github.io/software-showcase/" target="_blank" rel="noopener noreferrer">
                   <ExternalLink size={16} />打开展示网页
                 </a>
-                <span className="admin-github-sync-hint">仅本机 Node.js 后台可用 · 提交信息：<code>chore: update website from admin</code></span>
+                <span className="admin-github-sync-hint">仅本机 Node.js 后台可用 · 需要验证时由 Git Credential Manager 打开浏览器登录</span>
               </div>
               {syncMessage && (
-                <div className={`admin-github-sync-progress ${syncing ? "is-running" : ""}`} role="status" aria-live="polite">
+                <div className={`admin-github-sync-progress ${syncing ? "is-running" : ""} ${syncResult === "error" ? "is-error" : ""} ${syncResult === "success" ? "is-success" : ""}`} role="status" aria-live="polite">
                   <div className="admin-github-sync-progress-head"><strong>{syncMessage}</strong><span>{syncProgress}%</span></div>
                   <div className="admin-github-sync-progress-track" aria-hidden="true"><span style={{ width: `${syncProgress}%` }} /></div>
                   {syncDetails.length > 0 && <ul className="admin-github-sync-details">{syncDetails.map((detail, index) => <li key={`${detail}-${index}`}>{detail}</li>)}</ul>}

@@ -55,7 +55,14 @@ function runGit(args: string[], onOutput?: (stream: "stdout" | "stderr", text: s
   return new Promise<GitResult>((resolve, reject) => {
     const child = spawn("git", args, {
       cwd: process.cwd(),
-      env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+      env: {
+        ...process.env,
+        GIT_TERMINAL_PROMPT: "0",
+        GCM_INTERACTIVE: "auto",
+        GCM_GUI_PROMPT: "true",
+        GCM_PROVIDER: "github",
+        GCM_GITHUB_AUTHMODES: "browser",
+      },
       windowsHide: true,
     });
     let stdout = "";
@@ -98,8 +105,10 @@ export async function POST(request: Request) {
       const send = (event: SyncEvent) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
       };
+      let currentPercent = 0;
       const progress = (percent: number, message: string, detail?: string) => {
-        send({ type: "progress", percent, message, detail });
+        currentPercent = Math.max(currentPercent, Math.min(100, percent));
+        send({ type: "progress", percent: currentPercent, message, detail });
       };
       const logOutput = (percent: number, streamName: "stdout" | "stderr", text: string) => {
         const lines = text.replace(/\r/g, "").split("\n").map((line) => line.trim()).filter(Boolean);
@@ -108,7 +117,19 @@ export async function POST(request: Request) {
         }
       };
       const fail = (message: string, detail?: string) => {
-        send({ type: "complete", percent: 100, message, detail, success: false });
+        send({ type: "complete", percent: Math.min(currentPercent, 99), message, detail, success: false });
+      };
+      const getPushFailureMessage = (output: string) => {
+        if (/could not resolve host|could not connect|failed to connect|connection (?:was )?reset|connection timed out|timed out|network is unreachable|ssl connection/i.test(output)) {
+          return "连接 GitHub 失败（网络、代理或防火墙问题），请求尚未进入凭证验证阶段。";
+        }
+        if (/authentication failed|could not read (?:username|password)|terminal prompts disabled|http basic: access denied|bad credentials|invalid username or password/i.test(output)) {
+          return "GitHub 凭证验证未通过。已启用 Git Credential Manager 浏览器登录；如未弹出浏览器，请检查 GCM 安装和系统默认浏览器。";
+        }
+        if (/permission to .* denied|write access to repository not granted|protected branch|403/i.test(output)) {
+          return "GitHub 已响应，但当前账号可能没有此仓库或分支的推送权限。";
+        }
+        return "推送到 GitHub 失败，请检查下方 Git 错误详情。";
       };
 
       void (async () => {
@@ -197,7 +218,8 @@ export async function POST(request: Request) {
             }
           });
           if (pushResult.code !== 0) {
-            fail("推送到 GitHub 失败，请检查 GitHub 登录凭据或网络连接。", getOutputMessage(pushResult));
+            const pushOutput = `${pushResult.stderr}\n${pushResult.stdout}`;
+            fail(getPushFailureMessage(pushOutput), getOutputMessage(pushResult));
             return;
           }
 

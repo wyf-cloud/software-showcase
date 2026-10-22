@@ -599,6 +599,11 @@ kbd { border: 1px solid var(--line); border-radius: 5px; background: var(--surfa
 .admin-github-sync-hint { color: var(--muted); font-size: 10px; line-height: 1.6; }
 .admin-github-sync-progress { display: grid; gap: 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); padding: 14px; }
 .admin-github-sync-progress.is-running { border-color: color-mix(in srgb, var(--brand) 28%, var(--line)); }
+.admin-github-sync-progress.is-error { border-color: color-mix(in srgb, #b7473f 38%, var(--line)); }
+.admin-github-sync-progress.is-error .admin-github-sync-progress-head { color: #a83e37; }
+.admin-github-sync-progress.is-error .admin-github-sync-progress-head span { color: #a83e37; }
+.admin-github-sync-progress.is-error .admin-github-sync-progress-track span { background: #b7473f; }
+.admin-github-sync-progress.is-success .admin-github-sync-progress-track span { background: var(--brand); }
 .admin-github-sync-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--ink); font-size: 12px; }
 .admin-github-sync-progress-head span { color: var(--brand); font-family: "DM Mono", monospace; font-size: 11px; }
 .admin-github-sync-progress-track { height: 8px; overflow: hidden; border-radius: 999px; background: var(--line); }
