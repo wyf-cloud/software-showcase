@@ -1,0 +1,10 @@
+import eslintConfig from "eslint-config-next/core-web-vitals";
+
+const config = [
+  {
+    ignores: [".next/**", "out/**", "node_modules/**", "next-env.d.ts"],
+  },
+  ...eslintConfig,
+];
+
+export default config;
