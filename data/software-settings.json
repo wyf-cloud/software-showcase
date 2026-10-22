@@ -5,114 +5,34 @@
     "tagline": "",
     "description": "这是一款面向 Excel 报价与成本测算场景的 VSTO 工具箱，将价格导入、数据匹配、调价计算和结果导出整合在熟悉的工作表流程中。支持按单价、总价、系数及限价等规则灵活调价，可批量添加组件、导入成本与限价数据，并按包号或采购申请号导出分析表。配套数据库管理、价格匹配、动态看板和操作手册，帮助减少重复整理与手工计算，让报价处理更高效、清晰。",
     "category": "效率工具",
-    "tags": [
-      "笔记",
-      "知识管理",
-      "Markdown"
-    ],
-    "platforms": [
-      "Web",
-      "macOS"
-    ],
-    "status": "持续更新",
     "version": "1.8.2",
     "updatedAt": "2026-09-18",
     "featured": true,
     "accent": "mint",
     "visual": "notes",
-    "features": [
-      {
-        "title": "从数据准备到结果导出，一套流程处理",
-        "description": "支持初始化工作簿、导入价格、执行调价，并按包或采购申请号导出结果，减少在多个文件和操作步骤之间来回切换。"
-      },
-      {
-        "title": "多种调价方式，适配不同业务场景",
-        "description": "可按未含税单价、单价、总价、系数及限价差额等方式调整；同时提供有限调价、无限调价等路径，方便根据目标价格和限价要求灵活处理。"
-      },
-      {
-        "title": "智能匹配与界面自定义，操作更顺手",
-        "description": "导入价格时可结合物资名称、技术规范编号及申请号进行匹配；还可通过“按钮配置中心”选择常用功能按钮，并保存显示设置，让工具栏更贴合个人工作习惯。"
-      }
-    ],
-    "screenshots": [
-      {
-        "title": "精准调价",
-        "caption": "按用户提供的包的价格精准调价",
-        "visual": "calendar",
-        "linkUrl": "https://space.bilibili.com/398056029/lists/8988372?type=season"
-      },
-      {
-        "title": "批量导入",
-        "caption": "可快速导出单价分析表",
-        "visual": "library",
-        "linkUrl": "https://www.bilibili.com/video/BV194tu6XEgN/?spm_id_from=333.1387.collection.video_card.click&vd_source=2d514f68ec64eb141641afc92b4f9854"
-      },
-      {
-        "title": "批量修改元器件价格",
-        "caption": "批量修改元器件",
-        "visual": "studio",
-        "linkUrl": "https://www.bilibili.com/video/BV1X4tu6XED9/?spm_id_from=333.1387.collection.video_card.click&vd_source=2d514f68ec64eb141641afc92b4f9854"
-      }
-    ],
+    "screenshots": [],
     "imageUrl": "/uploads/11444901-baa2-4cd2-b46d-705073c8fd54.png",
     "storyTitle": "",
     "storyBody": "",
+    "demoUrl": "https://space.bilibili.com/398056029?spm_id_from=333.1007.0.0",
     "downloadUrl": "https://pan.baidu.com/s/1Q7CrWXL9l1xGB4blq89x8w?pwd=ist7"
   },
   {
     "slug": "tempo-board",
-    "name": "Tempo Board",
-    "tagline": "把每一天，安排得刚刚好。",
-    "description": "面向独立创作者的轻量项目与时间管理工作台，让计划、进度和成果保持清晰。",
+    "name": "批量盖章工具",
+    "tagline": "",
+    "description": "《批量盖章（仅支持PDF）》是一款面向企业、行政机构、财务人员、项目团队及个人用户打造的PDF文档批量盖章工具。软件专注于解决合同、报价单、审批文件、报销凭证、证明材料等文档逐份盖章效率低、操作重复、容易遗漏的问题，帮助用户以更加快捷、规范的方式完成文件处理。\n软件支持一次导入多个PDF文件，用户可根据实际需求选择印章图片，设置印章位置、大小、透明度和页面范围，并对盖章效果进行直观预览。完成参数配置后，系统即可按照统一规则自动处理整批文档，无需反复打开文件、复制印章和调整位置，大幅减少人工操作时间。对于页数较多、文件数量较大的资料，也能保持清晰稳定的处理效果。\n在使用过程中，软件界面简洁明了，操作流程清晰，适合不同电脑基础的用户快速上手。用户可以根据文件类型建立统一的盖章标准，确保同一批文档的印章样式和位置保持一致，提升资料的专业性与规范性。处理完成后，系统将生成新的PDF文件，原始文件保持独立保存，方便用户进行核对、归档和后续管理。\n《批量盖章（仅支持PDF）》适用于日常办公、合同管理、资料归档、项目申报、财务审核、商务往来等多种场景。它以批量化、自动化和易操作为核心特点，让繁琐的盖章工作更加高效，让文件处理更加统一，是提升办公效率、优化文档管理流程的实用工具。",
     "category": "效率工具",
-    "tags": [
-      "任务管理",
-      "项目协作",
-      "时间规划"
-    ],
-    "platforms": [
-      "Web",
-      "iOS"
-    ],
-    "status": "正式发布",
     "version": "2.3.0",
     "updatedAt": "2026-08-27",
     "featured": true,
     "accent": "blue",
     "visual": "dashboard",
-    "features": [
-      {
-        "title": "项目状态，一目了然",
-        "description": "用清晰的看板视图梳理阶段、优先级和下一步行动。"
-      },
-      {
-        "title": "留出真正专注的时间",
-        "description": "把任务和日程放在一起，减少切换，让重要的事情有完整时间。"
-      },
-      {
-        "title": "回顾完成的每一步",
-        "description": "温和的进度反馈，帮助你看见持续积累的成果。"
-      }
-    ],
-    "screenshots": [
-      {
-        "title": "项目总览",
-        "caption": "工作流、今日任务与进度集中呈现。",
-        "visual": "dashboard"
-      },
-      {
-        "title": "每周计划",
-        "caption": "在可执行的节奏里推进重要项目。",
-        "visual": "calendar"
-      },
-      {
-        "title": "数据洞察",
-        "caption": "通过轻量统计找到更适合自己的工作方式。",
-        "visual": "insights"
-      }
-    ],
+    "screenshots": [],
+    "imageUrl": "/uploads/a3267e93-9635-49e7-b0c8-9d1723a86ab9.png",
     "storyTitle": "",
-    "storyBody": ""
+    "storyBody": "",
+    "downloadUrl": "https://pan.baidu.com/s/1AislzSPrbyh4Tbd2A6nAng?pwd=5psj"
   },
   {
     "slug": "daylight-planner",
@@ -120,35 +40,11 @@
     "tagline": "让计划，留一点呼吸感。",
     "description": "一款以时间区块为核心的日程规划应用，帮助你在专注工作与自在生活之间找到平衡。",
     "category": "生活方式",
-    "tags": [
-      "日历",
-      "习惯养成",
-      "专注"
-    ],
-    "platforms": [
-      "Web",
-      "Android"
-    ],
-    "status": "持续更新",
     "version": "1.2.5",
     "updatedAt": "2026-07-11",
     "featured": true,
     "accent": "peach",
     "visual": "calendar",
-    "features": [
-      {
-        "title": "用时间块保护专注",
-        "description": "把一天安排成真实可执行的区块，而不是永远写不完的清单。"
-      },
-      {
-        "title": "习惯融入日常",
-        "description": "通过小而稳定的提醒，让重要的生活习惯变得容易坚持。"
-      },
-      {
-        "title": "计划也可以很松弛",
-        "description": "清晰查看空闲时间，为休息和意外留出空间。"
-      }
-    ],
     "screenshots": [
       {
         "title": "今日节奏",
@@ -175,34 +71,11 @@
     "tagline": "给创作一个更安静的画布。",
     "description": "轻量的视觉素材整理与灵感板工具，为设计探索、情绪板和创意提案提供一个舒服的起点。",
     "category": "创意设计",
-    "tags": [
-      "灵感板",
-      "设计",
-      "素材管理"
-    ],
-    "platforms": [
-      "Web"
-    ],
-    "status": "公开测试",
     "version": "0.9.4",
     "updatedAt": "2026-06-29",
     "featured": true,
     "accent": "lilac",
     "visual": "studio",
-    "features": [
-      {
-        "title": "灵感自由铺开",
-        "description": "把图片、文字和颜色放到一张没有边界感的创意画布上。"
-      },
-      {
-        "title": "素材井然有序",
-        "description": "以项目和主题整理收集内容，回看时仍然容易找到。"
-      },
-      {
-        "title": "轻松分享想法",
-        "description": "将早期探索整理成连贯的视觉故事，与伙伴快速同步。"
-      }
-    ],
     "screenshots": [
       {
         "title": "自由画布",
@@ -229,35 +102,11 @@
     "tagline": "看清每一笔，也看见生活。",
     "description": "更关注消费习惯而非复杂报表的个人记账应用，用温和的可视化帮助你了解金钱流向。",
     "category": "生活方式",
-    "tags": [
-      "记账",
-      "消费分析",
-      "个人财务"
-    ],
-    "platforms": [
-      "iOS",
-      "Android"
-    ],
-    "status": "正式发布",
     "version": "1.6.1",
     "updatedAt": "2026-05-16",
     "featured": false,
     "accent": "gold",
     "visual": "insights",
-    "features": [
-      {
-        "title": "记录足够轻松",
-        "description": "用少量操作记下收支，让好习惯不被繁琐流程打断。"
-      },
-      {
-        "title": "消费结构更直观",
-        "description": "通过清晰的分类和趋势，了解自己的生活支出。"
-      },
-      {
-        "title": "目标进度看得见",
-        "description": "把长期目标拆成可以持续追踪的小步骤。"
-      }
-    ],
     "screenshots": [
       {
         "title": "月度概览",
@@ -284,35 +133,11 @@
     "tagline": "把探索过的路，变成自己的地图。",
     "description": "为旅行与城市探索爱好者设计的灵感收藏夹，保存地点、路线和旅途中值得记住的小事。",
     "category": "创意设计",
-    "tags": [
-      "旅行规划",
-      "地图收藏",
-      "灵感"
-    ],
-    "platforms": [
-      "Web",
-      "iOS"
-    ],
-    "status": "概念展示",
     "version": "0.6.0",
     "updatedAt": "2026-04-03",
     "featured": false,
     "accent": "mint",
     "visual": "library",
-    "features": [
-      {
-        "title": "收下沿途的好去处",
-        "description": "把朋友推荐和偶然发现的地点放入自己的探索清单。"
-      },
-      {
-        "title": "让路线更有故事",
-        "description": "把地点、笔记和照片串在一起，留下旅程的脉络。"
-      },
-      {
-        "title": "分享私藏地图",
-        "description": "整理一份轻松易读的城市指南，与朋友共享灵感。"
-      }
-    ],
     "screenshots": [
       {
         "title": "探索清单",

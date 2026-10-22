@@ -38,17 +38,10 @@ function validateSoftwareItems(items: Software[]) {
     checkLength(i, "storyTitle", "详情故事标题", item.storyTitle, 160);
     checkLength(i, "storyBody", "详情故事正文", item.storyBody, 1200);
     checkLength(i, "version", "版本号", item.version, 30);
-    checkLength(i, "status", "项目状态", item.status, 40);
     if (item.updatedAt && (!/^\d{4}-\d{2}-\d{2}$/.test(item.updatedAt) || Number.isNaN(Date.parse(item.updatedAt)) || new Date(item.updatedAt + "T00:00:00Z").toISOString().slice(0, 10) !== item.updatedAt)) add(i, "updatedAt", "日期格式不正确；请选择有效日期，例如：2026-10-22");
-    if (item.tags.length > 12) add(i, "tags", "标签最多填写 12 项；例如：笔记，知识管理，Markdown");
-    if (item.tags.some((tag) => tag.length > 100)) add(i, "tags", "每个标签最多 100 个字符；例如：知识管理");
-    if (item.platforms.length > 10) add(i, "platforms", "支持平台最多填写 10 项；例如：Web，Windows，macOS");
-    if (item.platforms.some((platform) => platform.length > 100)) add(i, "platforms", "每个平台名称最多 100 个字符；例如：Windows");
     if (!["notes", "dashboard", "calendar", "studio", "library", "insights"].includes(item.visual)) add(i, "visual", "界面示意类型无效；请选择列表中的一种样式。");
     if (!["mint", "blue", "peach", "lilac", "gold"].includes(item.accent)) add(i, "accent", "卡片配色无效；请选择列表中的一种配色。");
-    checkUrl(i, "imageUrl", "封面图片地址", item.imageUrl); checkUrl(i, "demoUrl", "在线体验链接", item.demoUrl); checkUrl(i, "downloadUrl", "下载链接", item.downloadUrl); checkUrl(i, "sourceUrl", "源代码链接", item.sourceUrl); checkUrl(i, "documentationUrl", "文档链接", item.documentationUrl);
-    if (item.features.length > 12) add(i, "features", "功能亮点最多 12 项；请移除多余项后重试。");
-    item.features.forEach((row, index) => { checkLength(i, "features." + index + ".title", "亮点标题", row.title, 100); checkLength(i, "features." + index + ".description", "亮点说明", row.description, 300); });
+    checkUrl(i, "imageUrl", "封面图片地址", item.imageUrl); checkUrl(i, "demoUrl", "演示视频链接", item.demoUrl); checkUrl(i, "downloadUrl", "下载链接", item.downloadUrl); checkUrl(i, "sourceUrl", "源代码链接", item.sourceUrl); checkUrl(i, "documentationUrl", "文档链接", item.documentationUrl);
     if (item.screenshots.length > 12) add(i, "screenshots", "展示模块最多 12 项；请移除多余项后重试。");
     item.screenshots.forEach((row, index) => { checkLength(i, "screenshots." + index + ".title", "模块标题", row.title, 100); checkLength(i, "screenshots." + index + ".caption", "模块说明", row.caption, 240); checkUrl(i, "screenshots." + index + ".imageUrl", "展示图片地址", row.imageUrl); checkUrl(i, "screenshots." + index + ".linkUrl", "模块跳转链接", row.linkUrl); });
   });
@@ -61,9 +54,6 @@ const blankSoftware = (slug: string): Software => ({
   tagline: "为作品写一句简短介绍。",
   description: "详细介绍这款软件，说明它解决的问题、适用场景和设计理念。",
   category: "效率工具",
-  tags: [],
-  platforms: [],
-  status: "持续更新",
   version: "1.0.0",
   updatedAt: new Date().toISOString().slice(0, 10),
   featured: false,
@@ -72,16 +62,11 @@ const blankSoftware = (slug: string): Software => ({
   imageUrl: "",
   storyTitle: "",
   storyBody: "",
-  features: [{ title: "", description: "" }],
   screenshots: [{ title: "", caption: "", visual: "notes", imageUrl: "", linkUrl: "" }],
 });
 
 function Field({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string; children: ReactNode }) {
   return <div className={"admin-field " + (error ? "is-invalid" : "")}><label className="admin-field-label" htmlFor={id}>{label}</label>{children}{hint && <span className="admin-field-hint">{hint}</span>}{error && <span className="admin-field-error" id={id + "-error"}>{error}</span>}</div>;
-}
-
-function commaList(value: string) {
-  return value.split(/[,，、]/).map((part) => part.trim()).filter(Boolean);
 }
 
 function ImageControl({ id, label, value, busy, error, onChange, onUpload }: { id: string; label: string; value?: string; busy: boolean; error?: string; onChange: (value: string) => void; onUpload: (file: File) => void }) {
@@ -257,28 +242,16 @@ export function SoftwareManager({ token }: { token: string }) {
             <Field id={fieldId("description")} label="详细介绍" hint="显示在作品卡片详情页头部" error={fieldError("description")}><textarea {...inputProps("description")} value={selected.description} onChange={(event) => updateSelected({ description: event.target.value })} rows={4} maxLength={1200} placeholder="介绍作品解决的问题、适用场景和设计理念" /></Field>
             <Field id={fieldId("storyTitle")} label="详情故事标题" error={fieldError("storyTitle")}><input {...inputProps("storyTitle")} value={selected.storyTitle || ""} onChange={(event) => updateSelected({ storyTitle: event.target.value })} maxLength={160} placeholder="留空则使用默认标题" /></Field>
             <Field id={fieldId("storyBody")} label="详情故事正文" error={fieldError("storyBody")}><textarea {...inputProps("storyBody")} value={selected.storyBody || ""} onChange={(event) => updateSelected({ storyBody: event.target.value })} rows={4} maxLength={1200} placeholder="留空则根据详细介绍自动生成" /></Field>
-            <Field id={fieldId("tags")} label="标签" hint="用逗号分隔，最多 12 项" error={fieldError("tags")}><input {...inputProps("tags")} value={selected.tags.join("，")} onChange={(event) => updateSelected({ tags: commaList(event.target.value) })} placeholder="笔记，知识管理，Markdown" /></Field>
-            <Field id={fieldId("platforms")} label="支持平台" hint="用逗号分隔，最多 10 项" error={fieldError("platforms")}><input {...inputProps("platforms")} value={selected.platforms.join("，")} onChange={(event) => updateSelected({ platforms: commaList(event.target.value) })} placeholder="Web，Windows，macOS" /></Field>
             <Field id={fieldId("version")} label="版本号" error={fieldError("version")}><input {...inputProps("version")} value={selected.version} onChange={(event) => updateSelected({ version: event.target.value })} maxLength={30} placeholder="例如：1.0.0" /></Field>
             <Field id={fieldId("updatedAt")} label="最近更新日期" error={fieldError("updatedAt")}><input {...inputProps("updatedAt")} type="date" value={selected.updatedAt.slice(0, 10)} onChange={(event) => updateSelected({ updatedAt: event.target.value })} /></Field>
-            <Field id={fieldId("status")} label="项目状态" error={fieldError("status")}><input {...inputProps("status")} value={selected.status} onChange={(event) => updateSelected({ status: event.target.value })} maxLength={40} placeholder="例如：持续更新" /></Field>
             <Field id={fieldId("visual")} label="界面示意类型"><select {...inputProps("visual")} value={selected.visual} onChange={(event) => updateSelected({ visual: event.target.value as SoftwareVisual })}>{softwareVisualOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></Field>
             <Field id={fieldId("accent")} label="卡片配色"><select {...inputProps("accent")} value={selected.accent} onChange={(event) => updateSelected({ accent: event.target.value })}><option value="mint">薄荷绿</option><option value="blue">雾霾蓝</option><option value="peach">蜜桃橙</option><option value="lilac">淡紫色</option><option value="gold">香槟金</option></select></Field>
             <label className="admin-switch software-featured-switch"><input type="checkbox" checked={selected.featured} onChange={(event) => updateSelected({ featured: event.target.checked })} /><span className="admin-switch-track" /><span><b>首页精选</b><small>开启后显示在首页精选作品区</small></span></label>
             <div className="software-admin-image-block"><ImageControl id={fieldId("imageUrl")} label="封面 / 主展示图片" value={selected.imageUrl} error={fieldError("imageUrl")} busy={uploading === "cover"} onChange={(imageUrl) => updateSelected({ imageUrl })} onUpload={(file) => void upload(file, "cover", (imageUrl) => updateSelected({ imageUrl }))} />{selected.imageUrl && <div className="software-admin-preview-card"><Image src={selected.imageUrl} alt={selected.name + "封面预览"} fill unoptimized sizes="(max-width: 700px) 90vw, 460px" /></div>}</div>
-            <Field id={fieldId("demoUrl")} label="在线体验链接" hint="示例：https://example.com 或 /demo" error={fieldError("demoUrl")}><input {...inputProps("demoUrl")} type="text" inputMode="url" value={selected.demoUrl || ""} onChange={(event) => updateSelected({ demoUrl: event.target.value })} placeholder="https://example.com" /></Field>
+            <Field id={fieldId("demoUrl")} label="演示视频链接" hint="填写网页或视频网址；点击作品详情页的“演示视频”按钮后将在新页面打开。" error={fieldError("demoUrl")}><input {...inputProps("demoUrl")} type="text" inputMode="url" value={selected.demoUrl || ""} onChange={(event) => updateSelected({ demoUrl: event.target.value })} placeholder="https://example.com/demo-video" /></Field>
             <Field id={fieldId("downloadUrl")} label="下载链接" hint="示例：https://example.com/download 或 /downloads/app.zip" error={fieldError("downloadUrl")}><input {...inputProps("downloadUrl")} type="text" inputMode="url" value={selected.downloadUrl || ""} onChange={(event) => updateSelected({ downloadUrl: event.target.value })} placeholder="https://example.com/download" /></Field>
             <Field id={fieldId("sourceUrl")} label="源代码链接" hint="示例：https://github.com/name/project" error={fieldError("sourceUrl")}><input {...inputProps("sourceUrl")} type="text" inputMode="url" value={selected.sourceUrl || ""} onChange={(event) => updateSelected({ sourceUrl: event.target.value })} placeholder="https://github.com/name/project" /></Field>
             <Field id={fieldId("documentationUrl")} label="文档链接" hint="示例：https://docs.example.com" error={fieldError("documentationUrl")}><input {...inputProps("documentationUrl")} type="text" inputMode="url" value={selected.documentationUrl || ""} onChange={(event) => updateSelected({ documentationUrl: event.target.value })} placeholder="https://docs.example.com" /></Field>
-          </div>
-
-          <div className={"software-repeat-section " + (fieldError("features") ? "is-invalid" : "")} id={fieldId("features")} tabIndex={-1}>
-            <div className="software-repeat-heading"><div><span className="eyebrow">KEY CAPABILITIES</span><h4>功能亮点 <small>{selected.features.length}</small></h4></div><button type="button" className="button button-outline" disabled={selected.features.length >= 12} onClick={() => updateSelected({ features: [...selected.features, { title: "", description: "" }] })}><Plus size={14} /> 添加亮点</button></div>
-            {fieldError("features") && <div className="admin-field-error" id={fieldId("features") + "-error"} role="alert">{fieldError("features")}</div>}
-            {selected.features.map((feature, index) => {
-              const titleKey = "features." + index + ".title"; const descriptionKey = "features." + index + ".description";
-              return <div className="software-repeat-row feature-repeat-row" key={"feature-" + index}><span className="feature-no">{String(index + 1).padStart(2, "0")}</span><div className={"software-repeat-control " + (fieldError(titleKey) ? "is-invalid" : "")}><input {...inputProps(titleKey)} aria-label="亮点标题" value={feature.title} onChange={(event) => updateSelected({ features: selected.features.map((row, rowIndex) => rowIndex === index ? { ...row, title: event.target.value } : row) })} placeholder="功能标题" />{fieldError(titleKey) && <span className="admin-field-error" id={fieldId(titleKey) + "-error"}>{fieldError(titleKey)}</span>}</div><div className={"software-repeat-control " + (fieldError(descriptionKey) ? "is-invalid" : "")}><textarea {...inputProps(descriptionKey)} aria-label="亮点说明" value={feature.description} onChange={(event) => updateSelected({ features: selected.features.map((row, rowIndex) => rowIndex === index ? { ...row, description: event.target.value } : row) })} rows={2} placeholder="简要说明此功能带来的体验" />{fieldError(descriptionKey) && <span className="admin-field-error" id={fieldId(descriptionKey) + "-error"}>{fieldError(descriptionKey)}</span>}</div><button type="button" className="software-row-remove" aria-label="删除功能亮点" onClick={() => updateSelected({ features: selected.features.filter((_, rowIndex) => rowIndex !== index) })}><Trash2 size={15} /></button></div>;
-            })}
           </div>
 
           <div className={"software-repeat-section " + (fieldError("screenshots") ? "is-invalid" : "")} id={fieldId("screenshots")} tabIndex={-1}>
@@ -296,7 +269,7 @@ export function SoftwareManager({ token }: { token: string }) {
               </div></div>;
             })}
           </div>
-        </div> : <div className="software-manager-empty-state"><ImagePlus size={24} /><b>尚未添加作品模块</b><span>新建模块后即可设置图片、链接、文案与功能亮点。</span></div>}
+        </div> : <div className="software-manager-empty-state"><ImagePlus size={24} /><b>尚未添加作品模块</b><span>新建模块后即可设置图片、链接与文案。</span></div>}
       </div>}
     </section>
   );

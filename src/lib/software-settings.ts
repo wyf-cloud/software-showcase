@@ -19,11 +19,6 @@ function text(value: unknown, fallback = "", max = 500) {
   return typeof value === "string" ? value.trim().slice(0, max) : fallback;
 }
 
-function textList(value: unknown, fallback: string[], maxItems = 12) {
-  if (!Array.isArray(value)) return fallback;
-  return value.filter((item): item is string => typeof item === "string").map((item) => item.trim().slice(0, 100)).filter(Boolean).slice(0, maxItems);
-}
-
 export function normalizeMediaUrl(value: unknown, fallback = "") {
   const url = text(value, fallback, 500);
   if (!url) return "";
@@ -37,19 +32,10 @@ function visual(value: unknown, fallback: SoftwareVisual): SoftwareVisual {
 function blankItem(slug: string): Software {
   return {
     slug, name: "新建软件", tagline: "为作品写一句简短介绍。", description: "在这里详细介绍这款软件，说明它解决的问题与适用场景。",
-    category: "效率工具", tags: [], platforms: [], status: "持续更新", version: "1.0.0", updatedAt: new Date().toISOString().slice(0, 10),
-    featured: false, accent: "mint", visual: "notes", imageUrl: "", storyTitle: "", storyBody: "", features: [], screenshots: [],
+    category: "效率工具", version: "1.0.0", updatedAt: new Date().toISOString().slice(0, 10),
+    featured: false, accent: "mint", visual: "notes", imageUrl: "", storyTitle: "", storyBody: "", screenshots: [],
     demoUrl: "", downloadUrl: "", sourceUrl: "", documentationUrl: "",
   } as Software;
-}
-
-function normalizeFeatures(value: unknown, fallback: Software["features"]): Software["features"] {
-  const source = Array.isArray(value) ? value : fallback;
-  return source.slice(0, 12).map((item, index) => {
-    const row = record(item);
-    const defaultRow = fallback[index] || { title: "", description: "" };
-    return { title: text(row.title, defaultRow.title, 100), description: text(row.description, defaultRow.description, 300) };
-  }).filter((item) => item.title || item.description);
 }
 
 function normalizeScreenshots(value: unknown, fallback: Software["screenshots"]): Software["screenshots"] {
@@ -78,9 +64,6 @@ export function normalizeSoftwareItem(value: unknown, base?: Software): Software
     tagline: text(row.tagline, fallback.tagline, 140),
     description: text(row.description, fallback.description, 1200),
     category: text(row.category, fallback.category, 60),
-    tags: textList(row.tags, fallback.tags, 12),
-    platforms: textList(row.platforms, fallback.platforms, 10),
-    status: text(row.status, fallback.status, 40),
     version: text(row.version, fallback.version, 30),
     updatedAt: text(row.updatedAt, fallback.updatedAt, 30),
     featured: row.featured === true,
@@ -89,7 +72,6 @@ export function normalizeSoftwareItem(value: unknown, base?: Software): Software
     imageUrl: normalizeMediaUrl(row.imageUrl, fallback.imageUrl || "") || undefined,
     storyTitle: text(row.storyTitle, fallback.storyTitle || "", 160),
     storyBody: text(row.storyBody, fallback.storyBody || "", 1200),
-    features: normalizeFeatures(row.features, fallback.features),
     screenshots: normalizeScreenshots(row.screenshots, fallback.screenshots),
     demoUrl: normalizeMediaUrl(row.demoUrl, fallback.demoUrl || "") || undefined,
     downloadUrl: normalizeMediaUrl(row.downloadUrl, fallback.downloadUrl || "") || undefined,

@@ -14,7 +14,7 @@ export function SoftwareCard({ item, index = 0, featured = false }: { item: Soft
       <div className="card-content">
         <div className="card-heading"><h3>{item.name}</h3><span className="card-version">v{item.version}</span></div>
         <p>{item.tagline}</p>
-        <div className="card-bottom"><div className="tag-list">{item.tags.slice(0, 2).map((tag) => <span key={tag}>{tag}</span>)}</div><span className="card-arrow"><MoveUpRight size={16} /></span></div>
+        <div className="card-bottom"><span className="card-arrow"><MoveUpRight size={16} /></span></div>
       </div>
     </Link>
   );

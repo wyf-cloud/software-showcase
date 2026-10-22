@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
+import { Check, CloudUpload, LoaderCircle, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { SiteSettings } from "@/lib/site-settings";
@@ -51,6 +51,15 @@ const defaultForm: SiteSettings = {
 };
 
 type Status = { type: "success" | "error" | "info"; message: string } | null;
+type GitHubSyncEvent = {
+  type: "progress" | "log" | "complete";
+  percent: number;
+  message: string;
+  detail?: string;
+  success?: boolean;
+};
+
+const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -69,6 +78,10 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<Status>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(0);
+  const [syncMessage, setSyncMessage] = useState("");
+  const [syncDetails, setSyncDetails] = useState<string[]>([]);
 
   const loadSettings = useCallback(async (candidate: string) => {
     if (!candidate.trim()) {
@@ -133,6 +146,68 @@ export function AdminDashboard() {
       setStatus({ type: "error", message: error instanceof Error ? error.message : "保存失败，请稍后重试。" });
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function syncToGitHub() {
+    if (!window.confirm("将把本机项目中所有未忽略的改动提交并推送到 GitHub（包括已有的未提交修改）。继续吗？")) return;
+    if (!token.trim()) {
+      setAuthenticated(false);
+      setStatus({ type: "error", message: "登录状态已失效，请重新输入管理员口令。" });
+      return;
+    }
+    if (isStaticExport) {
+      setStatus({ type: "error", message: "GitHub Pages 静态版不具备本机 Git 推送能力，请在本机后台执行。" });
+      return;
+    }
+
+    setSyncing(true);
+    setSyncProgress(0);
+    setSyncMessage("正在准备 GitHub 更新…");
+    setSyncDetails([]);
+    setStatus(null);
+
+    try {
+      const response = await fetch("/api/admin/github-sync", {
+        method: "POST",
+        headers: { "x-admin-token": token.trim() },
+      });
+      if (!response.ok) {
+        const data = await response.json() as { error?: string };
+        throw new Error(data.error || "GitHub 更新请求失败。");
+      }
+      if (!response.body) throw new Error("服务器没有返回实时进度流。");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let completed = false;
+      while (true) {
+        const { value, done } = await reader.read();
+        buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+        const chunks = buffer.split("\n\n");
+        buffer = chunks.pop() || "";
+        for (const chunk of chunks) {
+          const line = chunk.split("\n").find((item) => item.startsWith("data: "));
+          if (!line) continue;
+          const event = JSON.parse(line.slice(6)) as GitHubSyncEvent;
+          setSyncProgress((current) => Math.max(current, event.percent));
+          setSyncMessage(event.message);
+          if (event.detail) setSyncDetails((current) => [...current, event.detail!].slice(-6));
+          if (event.type === "complete") {
+            completed = true;
+            setStatus({ type: event.success ? "success" : "error", message: event.message });
+          }
+        }
+        if (done) break;
+      }
+      if (!completed) throw new Error("GitHub 更新没有正常结束。");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "GitHub 更新失败，请稍后重试。";
+      setSyncMessage(message);
+      setStatus({ type: "error", message });
+    } finally {
+      setSyncing(false);
     }
   }
 
@@ -257,6 +332,28 @@ export function AdminDashboard() {
           </div>
 
           <SoftwareManager token={token} />
+
+          <section className="admin-card admin-github-sync-card">
+            <div className="admin-card-heading"><span className="admin-card-index">06</span><div><span className="eyebrow">VERSION CONTROL</span><h2>更新到 GitHub</h2></div></div>
+            <div className="admin-github-sync-body">
+              <p className="admin-github-sync-description">点击按钮后，后台会把本机项目中所有未忽略的代码和资源变更加入 Git、创建提交并推送到当前分支的 <code>origin</code> 远程仓库。</p>
+              <div className="admin-github-sync-actions">
+                <button className="button button-dark" type="button" onClick={() => void syncToGitHub()} disabled={syncing || isStaticExport}>
+                  {syncing ? <LoaderCircle className="admin-sync-spinner" size={16} /> : <CloudUpload size={16} />}
+                  {isStaticExport ? "静态版不可用" : syncing ? "正在更新…" : "立即更新到 GitHub"}
+                </button>
+                <span className="admin-github-sync-hint">仅本机 Node.js 后台可用 · 提交信息：<code>chore: update website from admin</code></span>
+              </div>
+              {syncMessage && (
+                <div className={`admin-github-sync-progress ${syncing ? "is-running" : ""}`} role="status" aria-live="polite">
+                  <div className="admin-github-sync-progress-head"><strong>{syncMessage}</strong><span>{syncProgress}%</span></div>
+                  <div className="admin-github-sync-progress-track" aria-hidden="true"><span style={{ width: `${syncProgress}%` }} /></div>
+                  {syncDetails.length > 0 && <ul className="admin-github-sync-details">{syncDetails.map((detail, index) => <li key={`${detail}-${index}`}>{detail}</li>)}</ul>}
+                </div>
+              )}
+            </div>
+          </section>
+
           <div className="admin-bottom-note"><ShieldCheck size={16} /><span>设置文件适合单机 Node.js 部署。若部署到无持久化文件系统的平台，请将存储层迁移到数据库或持久化卷。</span></div>
         </form>
       )}
