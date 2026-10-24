@@ -1,4 +1,6 @@
 export type SoftwareVisual = "notes" | "dashboard" | "calendar" | "studio" | "library" | "insights";
+export type SoftwarePriceType = "free" | "paid";
+export type SoftwareBadgeStyle = "orbit" | "sheen" | "pulse" | "glass" | "enamel" | "prism";
 
 export type Software = {
   slug: string;
@@ -9,6 +11,9 @@ export type Software = {
   version: string;
   updatedAt: string;
   featured: boolean;
+  priceType: SoftwarePriceType;
+  price: string;
+  badgeStyle: SoftwareBadgeStyle;
   accent: string;
   visual: SoftwareVisual;
   imageUrl?: string;
@@ -32,6 +37,9 @@ export const software: Software[] = [
     version: "1.8.2",
     updatedAt: "2026-09-18",
     featured: true,
+    priceType: "free",
+    price: "",
+    badgeStyle: "orbit",
     accent: "mint",
     visual: "notes",
     screenshots: [
@@ -49,6 +57,9 @@ export const software: Software[] = [
     version: "2.3.0",
     updatedAt: "2026-08-27",
     featured: true,
+    priceType: "free",
+    price: "",
+    badgeStyle: "orbit",
     accent: "blue",
     visual: "dashboard",
     screenshots: [
@@ -66,6 +77,9 @@ export const software: Software[] = [
     version: "1.2.5",
     updatedAt: "2026-07-11",
     featured: true,
+    priceType: "free",
+    price: "",
+    badgeStyle: "orbit",
     accent: "peach",
     visual: "calendar",
     screenshots: [
@@ -83,6 +97,9 @@ export const software: Software[] = [
     version: "0.9.4",
     updatedAt: "2026-06-29",
     featured: true,
+    priceType: "free",
+    price: "",
+    badgeStyle: "orbit",
     accent: "lilac",
     visual: "studio",
     screenshots: [
@@ -100,6 +117,9 @@ export const software: Software[] = [
     version: "1.6.1",
     updatedAt: "2026-05-16",
     featured: false,
+    priceType: "free",
+    price: "",
+    badgeStyle: "orbit",
     accent: "gold",
     visual: "insights",
     screenshots: [
@@ -117,6 +137,9 @@ export const software: Software[] = [
     version: "0.6.0",
     updatedAt: "2026-04-03",
     featured: false,
+    priceType: "free",
+    price: "",
+    badgeStyle: "orbit",
     accent: "mint",
     visual: "library",
     screenshots: [

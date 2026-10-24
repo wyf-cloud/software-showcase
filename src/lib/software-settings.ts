@@ -2,11 +2,12 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { software as defaultSoftware, type Software, type SoftwareVisual } from "@/data/software";
 
-import { softwareVisualOptions } from "@/data/software-options";
+import { softwareBadgeStyleOptions, softwareVisualOptions } from "@/data/software-options";
 
-export { softwareVisualOptions };
+export { softwareBadgeStyleOptions, softwareVisualOptions };
 
 const visualSet = new Set(softwareVisualOptions.map((item) => item.value));
+const badgeStyleSet = new Set(softwareBadgeStyleOptions.map((item) => item.value));
 const accentSet = new Set(["mint", "blue", "peach", "lilac", "gold"]);
 const softwarePath = path.join(process.cwd(), "data", "software-settings.json");
 type RecordValue = Record<string, unknown>;
@@ -33,7 +34,7 @@ function blankItem(slug: string): Software {
   return {
     slug, name: "新建软件", tagline: "为作品写一句简短介绍。", description: "在这里详细介绍这款软件，说明它解决的问题与适用场景。",
     category: "效率工具", version: "1.0.0", updatedAt: new Date().toISOString().slice(0, 10),
-    featured: false, accent: "mint", visual: "notes", imageUrl: "", storyTitle: "", storyBody: "", screenshots: [],
+    featured: false, priceType: "free", price: "", badgeStyle: "orbit", accent: "mint", visual: "notes", imageUrl: "", storyTitle: "", storyBody: "", screenshots: [],
     demoUrl: "", downloadUrl: "", sourceUrl: "", documentationUrl: "",
   } as Software;
 }
@@ -67,6 +68,9 @@ export function normalizeSoftwareItem(value: unknown, base?: Software): Software
     version: text(row.version, fallback.version, 30),
     updatedAt: text(row.updatedAt, fallback.updatedAt, 30),
     featured: row.featured === true,
+    priceType: row.priceType === "paid" ? "paid" : "free",
+    price: text(row.price, fallback.price || "", 32),
+    badgeStyle: typeof row.badgeStyle === "string" && badgeStyleSet.has(row.badgeStyle as Software["badgeStyle"]) ? row.badgeStyle as Software["badgeStyle"] : fallback.badgeStyle,
     accent: typeof row.accent === "string" && accentSet.has(row.accent) ? row.accent : fallback.accent,
     visual: visual(row.visual, fallback.visual),
     imageUrl: normalizeMediaUrl(row.imageUrl, fallback.imageUrl || "") || undefined,

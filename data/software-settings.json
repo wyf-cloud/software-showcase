@@ -4,17 +4,20 @@
     "name": "国网调价工具",
     "tagline": "",
     "description": "这是一款面向 Excel 报价与成本测算场景的 VSTO 工具箱，将价格导入、数据匹配、调价计算和结果导出整合在熟悉的工作表流程中。支持按单价、总价、系数及限价等规则灵活调价，可批量添加组件、导入成本与限价数据，并按包号或采购申请号导出分析表。配套数据库管理、价格匹配、动态看板和操作手册，帮助减少重复整理与手工计算，让报价处理更高效、清晰。",
-    "category": "效率工具",
+    "category": "报价",
     "version": "1.8.2",
     "updatedAt": "2026-09-18",
     "featured": true,
+    "priceType": "paid",
+    "price": "",
+    "badgeStyle": "pulse",
     "accent": "mint",
     "visual": "notes",
     "screenshots": [],
     "imageUrl": "/uploads/11444901-baa2-4cd2-b46d-705073c8fd54.png",
     "storyTitle": "",
     "storyBody": "",
-    "demoUrl": "https://space.bilibili.com/398056029?spm_id_from=333.1007.0.0",
+    "demoUrl": "https://space.bilibili.com/398056029/lists/8988372?type=season",
     "downloadUrl": "https://pan.baidu.com/s/1Q7CrWXL9l1xGB4blq89x8w?pwd=ist7"
   },
   {
@@ -22,10 +25,13 @@
     "name": "批量盖章工具",
     "tagline": "",
     "description": "《批量盖章（仅支持PDF）》是一款面向企业、行政机构、财务人员、项目团队及个人用户打造的PDF文档批量盖章工具。软件专注于解决合同、报价单、审批文件、报销凭证、证明材料等文档逐份盖章效率低、操作重复、容易遗漏的问题，帮助用户以更加快捷、规范的方式完成文件处理。\n软件支持一次导入多个PDF文件，用户可根据实际需求选择印章图片，设置印章位置、大小、透明度和页面范围，并对盖章效果进行直观预览。完成参数配置后，系统即可按照统一规则自动处理整批文档，无需反复打开文件、复制印章和调整位置，大幅减少人工操作时间。对于页数较多、文件数量较大的资料，也能保持清晰稳定的处理效果。\n在使用过程中，软件界面简洁明了，操作流程清晰，适合不同电脑基础的用户快速上手。用户可以根据文件类型建立统一的盖章标准，确保同一批文档的印章样式和位置保持一致，提升资料的专业性与规范性。处理完成后，系统将生成新的PDF文件，原始文件保持独立保存，方便用户进行核对、归档和后续管理。\n《批量盖章（仅支持PDF）》适用于日常办公、合同管理、资料归档、项目申报、财务审核、商务往来等多种场景。它以批量化、自动化和易操作为核心特点，让繁琐的盖章工作更加高效，让文件处理更加统一，是提升办公效率、优化文档管理流程的实用工具。",
-    "category": "效率工具",
+    "category": "PDF",
     "version": "2.3.0",
     "updatedAt": "2026-08-27",
     "featured": true,
+    "priceType": "free",
+    "price": "",
+    "badgeStyle": "orbit",
     "accent": "blue",
     "visual": "dashboard",
     "screenshots": [],
@@ -36,96 +42,65 @@
   },
   {
     "slug": "daylight-planner",
-    "name": "Daylight Planner",
-    "tagline": "让计划，留一点呼吸感。",
-    "description": "一款以时间区块为核心的日程规划应用，帮助你在专注工作与自在生活之间找到平衡。",
-    "category": "生活方式",
-    "version": "1.2.5",
+    "name": "投标工具",
+    "tagline": "",
+    "description": "投标工具插件是一款面向企业招投标工作的办公辅助软件，围绕项目管理、资料归集和标书编制等实际需求设计，帮助用户建立更加高效、规范的投标工作流程。软件可用于维护项目台账和投标信息，记录项目进度、投标状态及结果，并通过查询和统计功能快速了解项目情况，便于团队持续跟进和复盘。\n在资料管理方面，软件支持对企业资质、业绩信息、检测报告、系统证书及相关附件进行分类整理和集中维护，形成便于检索、调用和更新的资料库。面对不同项目的文件要求，用户可快速查找所需内容，减少重复搜集、手工复制和多版本整理的工作量；对于电力设备及工程类投标，还可辅助汇集技术参数、检验资料和试验报告，为技术响应文件编制提供便利。\n软件采用贴近日常办公习惯的操作方式，并与Word文档处理场景相结合，支持内容整理、格式编排及成果输出，帮助用户提升文件的一致性与可读性。完成后的材料可用于内部审核、打印和提交，相关项目与资料也便于后续复用。无论是投标专员整理商务文件，还是技术人员准备响应材料、项目人员跟踪进度，都能借助统一的工作入口减少信息分散和重复劳动。投标工具插件以实用、清晰、易操作为特点，致力于提升资料复用率、文件准确性和团队协作效率，为企业日常投标管理与标书制作提供稳定支持。",
+    "category": "投标",
+    "version": "1.2.3",
     "updatedAt": "2026-07-11",
     "featured": true,
-    "accent": "peach",
-    "visual": "calendar",
-    "screenshots": [
-      {
-        "title": "今日节奏",
-        "caption": "每天的安排清晰可见，也留有余地。",
-        "visual": "calendar"
-      },
-      {
-        "title": "习惯打卡",
-        "caption": "温和记录每一次持续，而不是追求完美。",
-        "visual": "insights"
-      },
-      {
-        "title": "专注模式",
-        "caption": "暂时收起干扰，把这一段时间留给自己。",
-        "visual": "studio"
-      }
-    ],
+    "priceType": "paid",
+    "price": "",
+    "badgeStyle": "orbit",
+    "accent": "blue",
+    "visual": "studio",
+    "screenshots": [],
+    "imageUrl": "/uploads/5e3b526d-51a3-419e-a7f3-0ae13126fd72.png",
     "storyTitle": "",
-    "storyBody": ""
+    "storyBody": "",
+    "downloadUrl": "https://pan.baidu.com/s/1biek6yzswTOICm0CuStkJQ?pwd=p7ev"
   },
   {
     "slug": "still-studio",
-    "name": "Still Studio",
-    "tagline": "给创作一个更安静的画布。",
-    "description": "轻量的视觉素材整理与灵感板工具，为设计探索、情绪板和创意提案提供一个舒服的起点。",
-    "category": "创意设计",
+    "name": "业绩系统",
+    "tagline": "",
+    "description": "《业绩管理Word版》是一款面向企业项目管理、合同归档与业绩资料整理的Word办公增强软件。它以Word插件形式运行，让用户在熟悉的办公环境中完成业绩录入、资料查询、文档复制、合同审查和发票处理，减少应用切换，提升日常工作效率。\n软件以业绩数据库为核心，支持项目、合同、客户、金额、日期、负责人及附件等信息的集中维护。用户可通过关键字、日期、条件筛选、排序和自定义过滤快速定位记录，并关联管理合同原件、运行报告及发票等资料。系统还支持批量复制与分类整理，帮助快速生成常用业务文件，减少重复录入和人工整理。\n软件集成AI合同审查功能，可提取和分析合同文本，结合规则辅助识别关键条款与潜在风险，并保留审查记录，便于后续复核。智能发票模块支持电子发票PDF解析、信息识别、在线查验和结果汇总，查验结果可导出为Excel报告，方便财务核对与项目归档。\n软件模块清晰、操作直观，并提供管理员设置、注册授权和数据库维护等功能。适用于工程项目、商务管理、合同管理、财务报销及企业运营等场景，可将业绩数据、合同文件和票据资料集中管理，促进业务流程规范化，提升资料查找与利用效率，为企业日常办公提供实用支持。",
+    "category": "业绩",
     "version": "0.9.4",
     "updatedAt": "2026-06-29",
     "featured": true,
+    "priceType": "paid",
+    "price": "",
+    "badgeStyle": "orbit",
     "accent": "lilac",
     "visual": "studio",
-    "screenshots": [
-      {
-        "title": "自由画布",
-        "caption": "不同灵感在同一空间里慢慢建立联系。",
-        "visual": "studio"
-      },
-      {
-        "title": "素材收藏",
-        "caption": "用简单的方式整理日常遇见的好设计。",
-        "visual": "library"
-      },
-      {
-        "title": "项目灵感",
-        "caption": "从参考素材到方向提案，保持创作脉络。",
-        "visual": "notes"
-      }
-    ],
+    "screenshots": [],
+    "imageUrl": "/uploads/50b67d22-a730-465a-b671-bcdc7b8f83d3.png",
     "storyTitle": "",
-    "storyBody": ""
+    "storyBody": "",
+    "demoUrl": "https://space.bilibili.com/398056029/lists/9391709?type=season",
+    "downloadUrl": "https://pan.baidu.com/s/1KKDVLT_7rwtceGd9zIqTtw?pwd=kgna"
   },
   {
     "slug": "little-ledger",
-    "name": "Little Ledger",
-    "tagline": "看清每一笔，也看见生活。",
-    "description": "更关注消费习惯而非复杂报表的个人记账应用，用温和的可视化帮助你了解金钱流向。",
-    "category": "生活方式",
+    "name": "国网算分软件",
+    "tagline": "",
+    "description": "国网算分软件是一款面向投标报价分析、价格评分和历史数据管理的专业工具，核心亮点是内置10种算分算法，覆盖国网算分9种算法与蒙西电网价格分算法1种。国网算法包括：最低评标价法、低价高分反比例（带系数）、区间复合平均价法（次低价平均）、区间复合平均价浮动法、区间平均价浮动法、区间平均下浮双边曲线算法、区间平均下浮双边曲线算法（含估算基准价）、算术平均值下浮法（基准价去同）和随机区间双边曲线算法；同时支持蒙西电网价格分的独立计算模式，满足不同业务规则下的算分需求。\n软件支持Excel文件导入、工作表选择、投标人和报价列自动识别，并可根据招标编号、包号、分标名称及厂家名称进行快速定位。每种算法均配有独立参数区和对应算法文档，用户可灵活设置浮动比例、区间范围、指数、线性系数、估算基准价等参数。系统会自动完成有效报价筛选、异常报价识别、基准价计算、价格分计算和排名整理，并在结果中展示计算过程、参与基准价样本、公式说明及详细日志，让每一步结果清晰可追溯。\n功能方面，软件支持目标厂家定位、结果表格查看、自动导出Excel、历史报价批量导入、数据库筛选维护、厂家趋势图、多厂家报价对比和白话分析解读。通过多算法切换、参数化计算、可视化分析和历史数据沉淀，软件能够减少重复计算，提高报价复核效率，为算分测试、数据分析和业务决策提供稳定、直观、便捷的工具支持。",
+    "category": "算分",
     "version": "1.6.1",
     "updatedAt": "2026-05-16",
     "featured": false,
+    "priceType": "paid",
+    "price": "",
+    "badgeStyle": "orbit",
     "accent": "gold",
     "visual": "insights",
-    "screenshots": [
-      {
-        "title": "月度概览",
-        "caption": "快速浏览收入、支出与结余。",
-        "visual": "insights"
-      },
-      {
-        "title": "消费分类",
-        "caption": "看懂日常支出结构，发现自己的节奏。",
-        "visual": "dashboard"
-      },
-      {
-        "title": "储蓄目标",
-        "caption": "把目标放在眼前，持续一点点靠近。",
-        "visual": "calendar"
-      }
-    ],
+    "screenshots": [],
+    "imageUrl": "/uploads/91366048-53ce-41ba-8369-b47159f0868d.png",
     "storyTitle": "",
-    "storyBody": ""
+    "storyBody": "",
+    "demoUrl": "https://www.bilibili.com/video/BV1LBnb6aEZv/?spm_id_from=333.1387.homepage.video_card.click&vd_source=2d514f68ec64eb141641afc92b4f9854",
+    "downloadUrl": "https://pan.baidu.com/s/1_jy6YykhYR69RuG5G2Tb3w?pwd=5g25"
   },
   {
     "slug": "field-guide",
@@ -136,6 +111,9 @@
     "version": "0.6.0",
     "updatedAt": "2026-04-03",
     "featured": false,
+    "priceType": "free",
+    "price": "",
+    "badgeStyle": "orbit",
     "accent": "mint",
     "visual": "library",
     "screenshots": [

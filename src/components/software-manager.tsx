@@ -4,8 +4,9 @@ import Image from "next/image";
 import { ArrowDown, ArrowUp, ExternalLink, ImagePlus, Plus, Save, Trash2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { Software, SoftwareVisual } from "@/data/software";
-import { softwareVisualOptions } from "@/data/software-options";
+import type { Software, SoftwareBadgeStyle, SoftwarePriceType, SoftwareVisual } from "@/data/software";
+import { softwareBadgeStyleOptions, softwareVisualOptions } from "@/data/software-options";
+import { SoftwarePricingBadge } from "@/components/software-pricing-badge";
 
 type EditorStatus = { type: "success" | "error" | "info"; message: string } | null;
 type ValidationIssue = { itemIndex: number; fieldId: string; message: string };
@@ -30,6 +31,9 @@ function validateSoftwareItems(items: Software[]) {
     else if (seen.has(slug)) add(i, "slug", "这个作品标识已被其他作品使用；例如：mori-notes-2");
     seen.add(slug);
     if (!item.name.trim()) add(i, "name", "请填写作品名称；例如：Mori Notes");
+    if (item.priceType !== "free" && item.priceType !== "paid") add(i, "priceType", "请选择免费或付费状态。");
+    if (item.priceType === "paid" && (item.price || "").length > 32) add(i, "price", "价格说明最多填写 32 个字符。");
+    if (!softwareBadgeStyleOptions.some((option) => option.value === item.badgeStyle)) add(i, "badgeStyle", "徽标风格无效；请选择六种样式之一。");
     checkLength(i, "slug", "详情页地址标识", item.slug, 60);
     checkLength(i, "name", "作品名称", item.name, 80);
     checkLength(i, "tagline", "一句话副标题", item.tagline, 140);
@@ -57,6 +61,9 @@ const blankSoftware = (slug: string): Software => ({
   version: "1.0.0",
   updatedAt: new Date().toISOString().slice(0, 10),
   featured: false,
+  priceType: "free",
+  price: "",
+  badgeStyle: "orbit",
   accent: "mint",
   visual: "notes",
   imageUrl: "",
@@ -247,6 +254,14 @@ export function SoftwareManager({ token }: { token: string }) {
             <Field id={fieldId("visual")} label="界面示意类型"><select {...inputProps("visual")} value={selected.visual} onChange={(event) => updateSelected({ visual: event.target.value as SoftwareVisual })}>{softwareVisualOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></Field>
             <Field id={fieldId("accent")} label="卡片配色"><select {...inputProps("accent")} value={selected.accent} onChange={(event) => updateSelected({ accent: event.target.value })}><option value="mint">薄荷绿</option><option value="blue">雾霾蓝</option><option value="peach">蜜桃橙</option><option value="lilac">淡紫色</option><option value="gold">香槟金</option></select></Field>
             <label className="admin-switch software-featured-switch"><input type="checkbox" checked={selected.featured} onChange={(event) => updateSelected({ featured: event.target.checked })} /><span className="admin-switch-track" /><span><b>首页精选</b><small>开启后显示在首页精选作品区</small></span></label>
+            <section className="software-pricing-settings" aria-label="软件价格与徽标设置">
+              <div className="software-pricing-heading"><div><span className="eyebrow">PRICE IDENTITY</span><h4>价格标识与动效</h4><p>选择免费或付费，并为这款软件挑选专属徽标质感。</p></div><SoftwarePricingBadge priceType={selected.priceType} price={selected.price} badgeStyle={selected.badgeStyle} className="pricing-badge-preview" /></div>
+              <div className="software-pricing-fields">
+                <Field id={fieldId("priceType")} label="软件定价" error={fieldError("priceType")}><select {...inputProps("priceType")} value={selected.priceType} onChange={(event) => updateSelected({ priceType: event.target.value as SoftwarePriceType })}><option value="free">免费软件</option><option value="paid">付费软件</option></select></Field>
+                {selected.priceType === "paid" && <Field id={fieldId("price")} label="价格说明（选填）" hint="例如：¥99、¥99 / 年、联系咨询" error={fieldError("price")}><input {...inputProps("price")} value={selected.price || ""} maxLength={32} onChange={(event) => updateSelected({ price: event.target.value })} placeholder="例如：¥99 / 年" /></Field>}
+                <Field id={fieldId("badgeStyle")} label="徽标风格 · 六选一" error={fieldError("badgeStyle")}><select {...inputProps("badgeStyle")} value={selected.badgeStyle} onChange={(event) => updateSelected({ badgeStyle: event.target.value as SoftwareBadgeStyle })}>{softwareBadgeStyleOptions.map((option) => <option key={option.value} value={option.value}>{option.label} · {option.description}</option>)}</select></Field>
+              </div>
+            </section>
             <div className="software-admin-image-block"><ImageControl id={fieldId("imageUrl")} label="封面 / 主展示图片" value={selected.imageUrl} error={fieldError("imageUrl")} busy={uploading === "cover"} onChange={(imageUrl) => updateSelected({ imageUrl })} onUpload={(file) => void upload(file, "cover", (imageUrl) => updateSelected({ imageUrl }))} />{selected.imageUrl && <div className="software-admin-preview-card"><Image src={selected.imageUrl} alt={selected.name + "封面预览"} fill unoptimized sizes="(max-width: 700px) 90vw, 460px" /></div>}</div>
             <Field id={fieldId("demoUrl")} label="演示视频链接" hint="填写网页或视频网址；点击作品详情页的“演示视频”按钮后将在新页面打开。" error={fieldError("demoUrl")}><input {...inputProps("demoUrl")} type="text" inputMode="url" value={selected.demoUrl || ""} onChange={(event) => updateSelected({ demoUrl: event.target.value })} placeholder="https://example.com/demo-video" /></Field>
             <Field id={fieldId("downloadUrl")} label="下载链接" hint="示例：https://example.com/download 或 /downloads/app.zip" error={fieldError("downloadUrl")}><input {...inputProps("downloadUrl")} type="text" inputMode="url" value={selected.downloadUrl || ""} onChange={(event) => updateSelected({ downloadUrl: event.target.value })} placeholder="https://example.com/download" /></Field>

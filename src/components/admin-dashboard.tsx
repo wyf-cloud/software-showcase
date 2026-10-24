@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, CloudUpload, ExternalLink, LoaderCircle, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
+import { Activity, Check, CloudUpload, ExternalLink, LoaderCircle, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { SiteSettings } from "@/lib/site-settings";
@@ -269,6 +269,8 @@ export function AdminDashboard() {
 
           {status && <div className={`admin-status admin-status-${status.type}`} role="status">{status.type === "success" ? <Check size={16} /> : <span className="admin-status-symbol">{status.type === "error" ? "!" : "i"}</span>}<span>{status.message}</span></div>}
 
+          <SoftwareManager token={token} />
+
           <div className="admin-grid">
             <section className="admin-card">
               <div className="admin-card-heading"><span className="admin-card-index">01</span><div><span className="eyebrow">BRAND SYSTEM</span><h2>品牌与联系</h2></div></div>
@@ -335,8 +337,6 @@ export function AdminDashboard() {
             </section>
           </div>
 
-          <SoftwareManager token={token} />
-
           <section className="admin-card admin-github-sync-card">
             <div className="admin-card-heading"><span className="admin-card-index">06</span><div><span className="eyebrow">VERSION CONTROL</span><h2>更新到 GitHub</h2></div></div>
             <div className="admin-github-sync-body">
@@ -348,6 +348,9 @@ export function AdminDashboard() {
                 </button>
                 <a className="button button-outline" href="https://wyf-cloud.github.io/software-showcase/" target="_blank" rel="noopener noreferrer">
                   <ExternalLink size={16} />打开展示网页
+                </a>
+                <a className="button button-outline" href="https://github.com/wyf-cloud/software-showcase/actions/workflows/deploy-pages.yml" target="_blank" rel="noopener noreferrer" aria-label="在 GitHub Actions 查看网站部署状态">
+                  <Activity size={16} />查看部署状态
                 </a>
                 <span className="admin-github-sync-hint">仅本机 Node.js 后台可用 · 需要验证时由 Git Credential Manager 打开浏览器登录</span>
               </div>

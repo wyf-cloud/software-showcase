@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, MoveUpRight } from "lucide-react";
 import type { Software } from "@/data/software";
 import { ProductVisual } from "@/components/product-visual";
+import { SoftwarePricingBadge } from "@/components/software-pricing-badge";
 
 export function SoftwareCard({ item, index = 0, featured = false }: { item: Software; index?: number; featured?: boolean }) {
   return (
@@ -9,6 +10,7 @@ export function SoftwareCard({ item, index = 0, featured = false }: { item: Soft
       <div className={`card-art art-bg-${item.accent}`}>
         <ProductVisual visual={item.visual} name={item.name} imageUrl={item.imageUrl} compact />
         <span className="card-category">{item.category}</span>
+        <SoftwarePricingBadge priceType={item.priceType} price={item.price} badgeStyle={item.badgeStyle} className="card-pricing-badge" />
         <span className="card-open" aria-hidden="true"><ArrowUpRight size={17} /></span>
       </div>
       <div className="card-content">
