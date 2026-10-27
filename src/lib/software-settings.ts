@@ -2,7 +2,7 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { software as defaultSoftware, type Software, type SoftwareVisual } from "@/data/software";
 
-import { softwareBadgeStyleOptions, softwareVisualOptions } from "@/data/software-options";
+import { getSoftwareCardColor, softwareBadgeStyleOptions, softwareVisualOptions } from "@/data/software-options";
 
 export { softwareBadgeStyleOptions, softwareVisualOptions };
 
@@ -20,6 +20,11 @@ function text(value: unknown, fallback = "", max = 500) {
   return typeof value === "string" ? value.trim().slice(0, max) : fallback;
 }
 
+function hexColor(value: unknown, fallback: string) {
+  const color = text(value, fallback, 7);
+  return /^#[0-9a-f]{6}$/i.test(color) ? color.toUpperCase() : fallback;
+}
+
 export function normalizeMediaUrl(value: unknown, fallback = "") {
   const url = text(value, fallback, 500);
   if (!url) return "";
@@ -34,7 +39,7 @@ function blankItem(slug: string): Software {
   return {
     slug, name: "新建软件", tagline: "为作品写一句简短介绍。", description: "在这里详细介绍这款软件，说明它解决的问题与适用场景。",
     category: "效率工具", version: "1.0.0", updatedAt: new Date().toISOString().slice(0, 10),
-    featured: false, priceType: "free", price: "", badgeStyle: "orbit", accent: "mint", visual: "notes", imageUrl: "", storyTitle: "", storyBody: "", screenshots: [],
+    featured: false, priceType: "free", price: "", badgeStyle: "orbit", accent: "mint", cardColor: "", visual: "notes", imageUrl: "", storyTitle: "", storyBody: "", screenshots: [],
     demoUrl: "", downloadUrl: "", sourceUrl: "", documentationUrl: "",
   } as Software;
 }
@@ -58,6 +63,7 @@ export function normalizeSoftwareItem(value: unknown, base?: Software): Software
   const row = record(value);
   const slug = text(row.slug, base?.slug || "", 60).toLowerCase();
   const fallback = base || blankItem(slug);
+  const normalizedAccent = typeof row.accent === "string" && accentSet.has(row.accent) ? row.accent : fallback.accent;
   return {
     ...fallback,
     slug,
@@ -71,7 +77,8 @@ export function normalizeSoftwareItem(value: unknown, base?: Software): Software
     priceType: row.priceType === "paid" ? "paid" : "free",
     price: text(row.price, fallback.price || "", 32),
     badgeStyle: typeof row.badgeStyle === "string" && badgeStyleSet.has(row.badgeStyle as Software["badgeStyle"]) ? row.badgeStyle as Software["badgeStyle"] : fallback.badgeStyle,
-    accent: typeof row.accent === "string" && accentSet.has(row.accent) ? row.accent : fallback.accent,
+    accent: normalizedAccent,
+    cardColor: hexColor(row.cardColor, fallback.cardColor || getSoftwareCardColor(normalizedAccent)),
     visual: visual(row.visual, fallback.visual),
     imageUrl: normalizeMediaUrl(row.imageUrl, fallback.imageUrl || "") || undefined,
     storyTitle: text(row.storyTitle, fallback.storyTitle || "", 160),
@@ -106,7 +113,7 @@ export async function readSoftware(): Promise<Software[]> {
     const raw = await readFile(softwarePath, "utf8");
     return normalizeSoftwareItems(JSON.parse(raw));
   } catch {
-    return defaultSoftware;
+    return defaultSoftware.map((item) => normalizeSoftwareItem(item));
   }
 }
 

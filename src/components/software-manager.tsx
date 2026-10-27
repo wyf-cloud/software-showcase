@@ -5,7 +5,7 @@ import { ArrowDown, ArrowUp, ExternalLink, ImagePlus, Plus, Save, Trash2, Upload
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Software, SoftwareBadgeStyle, SoftwarePriceType, SoftwareVisual } from "@/data/software";
-import { softwareBadgeStyleOptions, softwareVisualOptions } from "@/data/software-options";
+import { getSoftwareCardColor, softwareBadgeStyleOptions, softwareCardColorDefaults, softwareVisualOptions } from "@/data/software-options";
 import { SoftwarePricingBadge } from "@/components/software-pricing-badge";
 
 type EditorStatus = { type: "success" | "error" | "info"; message: string } | null;
@@ -44,7 +44,8 @@ function validateSoftwareItems(items: Software[]) {
     checkLength(i, "version", "版本号", item.version, 30);
     if (item.updatedAt && (!/^\d{4}-\d{2}-\d{2}$/.test(item.updatedAt) || Number.isNaN(Date.parse(item.updatedAt)) || new Date(item.updatedAt + "T00:00:00Z").toISOString().slice(0, 10) !== item.updatedAt)) add(i, "updatedAt", "日期格式不正确；请选择有效日期，例如：2026-10-22");
     if (!["notes", "dashboard", "calendar", "studio", "library", "insights"].includes(item.visual)) add(i, "visual", "界面示意类型无效；请选择列表中的一种样式。");
-    if (!["mint", "blue", "peach", "lilac", "gold"].includes(item.accent)) add(i, "accent", "卡片配色无效；请选择列表中的一种配色。");
+    if (!["mint", "blue", "peach", "lilac", "gold"].includes(item.accent)) add(i, "accent", "主题配色无效；请选择列表中的一种配色。");
+    if (!/^#[0-9a-f]{6}$/i.test(item.cardColor || "")) add(i, "cardColor", "卡片颜色需要填写 6 位十六进制颜色，例如：#D9EEE1。");
     checkUrl(i, "imageUrl", "封面图片地址", item.imageUrl); checkUrl(i, "demoUrl", "演示视频链接", item.demoUrl); checkUrl(i, "downloadUrl", "下载链接", item.downloadUrl); checkUrl(i, "sourceUrl", "源代码链接", item.sourceUrl); checkUrl(i, "documentationUrl", "文档链接", item.documentationUrl);
     if (item.screenshots.length > 12) add(i, "screenshots", "展示模块最多 12 项；请移除多余项后重试。");
     item.screenshots.forEach((row, index) => { checkLength(i, "screenshots." + index + ".title", "模块标题", row.title, 100); checkLength(i, "screenshots." + index + ".caption", "模块说明", row.caption, 240); checkUrl(i, "screenshots." + index + ".imageUrl", "展示图片地址", row.imageUrl); checkUrl(i, "screenshots." + index + ".linkUrl", "模块跳转链接", row.linkUrl); });
@@ -65,6 +66,7 @@ const blankSoftware = (slug: string): Software => ({
   price: "",
   badgeStyle: "orbit",
   accent: "mint",
+  cardColor: softwareCardColorDefaults.mint,
   visual: "notes",
   imageUrl: "",
   storyTitle: "",
@@ -237,7 +239,7 @@ export function SoftwareManager({ token }: { token: string }) {
         <aside className="software-manager-list" id="software-list" tabIndex={-1}>
           <div className="software-manager-list-title"><span>作品列表</span><b>{String(items.length).padStart(2, "0")}</b></div>
           {fieldErrors["software-list-error"] && <div className="admin-field-error software-list-error" id="software-list-error" tabIndex={-1} role="alert">{fieldErrors["software-list-error"]}</div>}
-          {items.length ? items.map((item, index) => <button type="button" key={item.slug + "-" + index} className={"software-manager-item " + (selectedIndex === index ? "is-selected " : "") + (itemHasErrors(index) ? "has-errors" : "")} onClick={() => setSelectedIndex(index)}><span className={"software-manager-swatch art-bg-" + item.accent} /><span><b>{item.name || "未命名作品"}</b><small>{item.category}{item.featured ? " · 精选" : ""}</small></span>{itemHasErrors(index) && <span className="software-manager-error-indicator" aria-label="此作品有待修正的字段" title="此作品有待修正的字段">!</span>}<ArrowDown className="software-manager-item-arrow" size={14} /></button>) : <p className="software-manager-empty">还没有作品模块，点击“新建作品”开始。</p>}
+          {items.length ? items.map((item, index) => <button type="button" key={item.slug + "-" + index} className={"software-manager-item " + (selectedIndex === index ? "is-selected " : "") + (itemHasErrors(index) ? "has-errors" : "")} onClick={() => setSelectedIndex(index)}><span className={"software-manager-swatch art-bg-" + item.accent} style={{ "--swatch-color": item.cardColor || getSoftwareCardColor(item.accent) } as React.CSSProperties} /><span><b>{item.name || "未命名作品"}</b><small>{item.category}{item.featured ? " · 精选" : ""}</small></span>{itemHasErrors(index) && <span className="software-manager-error-indicator" aria-label="此作品有待修正的字段" title="此作品有待修正的字段">!</span>}<ArrowDown className="software-manager-item-arrow" size={14} /></button>) : <p className="software-manager-empty">还没有作品模块，点击“新建作品”开始。</p>}
         </aside>
         {selected ? <div className="software-editor">
           <div className="software-editor-topline"><div><span className="eyebrow">EDIT MODULE / {String(selectedIndex + 1).padStart(2, "0")}</span><h3>{selected.name || "未命名作品"}</h3></div><div className="software-editor-actions"><button type="button" className="button button-outline" title="上移模块" aria-label="上移模块" disabled={selectedIndex <= 0} onClick={() => moveItem(-1)}><ArrowUp size={14} /></button><button type="button" className="button button-outline" title="下移模块" aria-label="下移模块" disabled={selectedIndex >= items.length - 1} onClick={() => moveItem(1)}><ArrowDown size={14} /></button>{selected.slug && <a className="button button-outline" href={"/software/" + selected.slug} target="_blank" rel="noreferrer"><ExternalLink size={14} /> 预览详情</a>}<button type="button" className="button button-outline software-delete-button" onClick={removeSelected}><Trash2 size={14} /> 删除</button></div></div>
@@ -252,7 +254,8 @@ export function SoftwareManager({ token }: { token: string }) {
             <Field id={fieldId("version")} label="版本号" error={fieldError("version")}><input {...inputProps("version")} value={selected.version} onChange={(event) => updateSelected({ version: event.target.value })} maxLength={30} placeholder="例如：1.0.0" /></Field>
             <Field id={fieldId("updatedAt")} label="最近更新日期" error={fieldError("updatedAt")}><input {...inputProps("updatedAt")} type="date" value={selected.updatedAt.slice(0, 10)} onChange={(event) => updateSelected({ updatedAt: event.target.value })} /></Field>
             <Field id={fieldId("visual")} label="界面示意类型"><select {...inputProps("visual")} value={selected.visual} onChange={(event) => updateSelected({ visual: event.target.value as SoftwareVisual })}>{softwareVisualOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></Field>
-            <Field id={fieldId("accent")} label="卡片配色"><select {...inputProps("accent")} value={selected.accent} onChange={(event) => updateSelected({ accent: event.target.value })}><option value="mint">薄荷绿</option><option value="blue">雾霾蓝</option><option value="peach">蜜桃橙</option><option value="lilac">淡紫色</option><option value="gold">香槟金</option></select></Field>
+            <Field id={fieldId("accent")} label="详情页主题配色"><select {...inputProps("accent")} value={selected.accent} onChange={(event) => updateSelected({ accent: event.target.value })}><option value="mint">薄荷绿</option><option value="blue">雾霾蓝</option><option value="peach">蜜桃橙</option><option value="lilac">淡紫色</option><option value="gold">香槟金</option></select></Field>
+             <Field id={fieldId("cardColor")} label="卡片颜色" hint="可直接选择或输入 HEX 颜色，例如：#D9EEE1" error={fieldError("cardColor")}><div className="admin-color-control"><input type="color" value={/^#[0-9a-f]{6}$/i.test(selected.cardColor || "") ? selected.cardColor : getSoftwareCardColor(selected.accent)} onChange={(event) => updateSelected({ cardColor: event.target.value.toUpperCase() })} /><input {...inputProps("cardColor")} value={selected.cardColor || ""} onChange={(event) => updateSelected({ cardColor: event.target.value })} maxLength={7} placeholder={getSoftwareCardColor(selected.accent)} /></div></Field>
             <label className="admin-switch software-featured-switch"><input type="checkbox" checked={selected.featured} onChange={(event) => updateSelected({ featured: event.target.checked })} /><span className="admin-switch-track" /><span><b>首页精选</b><small>开启后显示在首页精选作品区</small></span></label>
             <section className="software-pricing-settings" aria-label="软件价格与徽标设置">
               <div className="software-pricing-heading"><div><span className="eyebrow">PRICE IDENTITY</span><h4>价格标识与动效</h4><p>选择免费或付费，并为这款软件挑选专属徽标质感。</p></div><SoftwarePricingBadge priceType={selected.priceType} price={selected.price} badgeStyle={selected.badgeStyle} className="pricing-badge-preview" /></div>

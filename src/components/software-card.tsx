@@ -2,11 +2,12 @@ import Link from "next/link";
 import { ArrowUpRight, MoveUpRight } from "lucide-react";
 import type { Software } from "@/data/software";
 import { ProductVisual } from "@/components/product-visual";
+import { getSoftwareCardColor } from "@/data/software-options";
 import { SoftwarePricingBadge } from "@/components/software-pricing-badge";
 
 export function SoftwareCard({ item, index = 0, featured = false }: { item: Software; index?: number; featured?: boolean }) {
   return (
-    <Link href={`/software/${item.slug}`} className={`software-card ${featured ? "featured-card" : ""}`} style={{ "--card-index": index } as React.CSSProperties}>
+    <Link href={`/software/${item.slug}`} className={`software-card ${featured ? "featured-card" : ""}`} style={{ "--card-index": index, "--card-color": item.cardColor || getSoftwareCardColor(item.accent) } as React.CSSProperties}>
       <div className={`card-art art-bg-${item.accent}`}>
         <ProductVisual visual={item.visual} name={item.name} imageUrl={item.imageUrl} compact />
         <span className="card-category">{item.category}</span>

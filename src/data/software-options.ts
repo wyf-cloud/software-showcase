@@ -9,6 +9,18 @@ export const softwareVisualOptions: { value: SoftwareVisual; label: string }[] =
   { value: "insights", label: "趋势报表" },
 ];
 
+export const softwareCardColorDefaults: Record<string, string> = {
+  mint: "#D9EEE1",
+  blue: "#D5E8ED",
+  peach: "#F5E0C3",
+  lilac: "#E4E0F2",
+  gold: "#F0E6B8",
+};
+
+export function getSoftwareCardColor(accent: string) {
+  return softwareCardColorDefaults[accent] || softwareCardColorDefaults.mint;
+}
+
 export const softwareBadgeStyleOptions: { value: SoftwareBadgeStyle; label: string; description: string }[] = [
   { value: "orbit", label: "环轨流光", description: "双层光轨缓缓环绕" },
   { value: "sheen", label: "丝绸掠光", description: "柔和高光从表面滑过" },

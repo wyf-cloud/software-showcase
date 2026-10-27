@@ -15,6 +15,7 @@ export type Software = {
   price: string;
   badgeStyle: SoftwareBadgeStyle;
   accent: string;
+  cardColor?: string;
   visual: SoftwareVisual;
   imageUrl?: string;
   storyTitle?: string;

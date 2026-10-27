@@ -193,6 +193,8 @@ html[data-theme="dark"] .hero-backdrop { background: radial-gradient(circle at 7
 .art-bg-lilac { background: linear-gradient(135deg, #e4e0f2, #c5bde4); }
 .art-bg-gold { background: linear-gradient(135deg, #f0e6b8, #d8ba66); }
 .art-bg-blue { background: linear-gradient(135deg, #d5e8ed, #aecbd7); }
+.software-card .card-art { background: linear-gradient(135deg, color-mix(in srgb, var(--card-color, #d9eee1) 48%, #fff), color-mix(in srgb, var(--card-color, #d9eee1) 72%, #fff)); }
+.software-manager-swatch { background: linear-gradient(135deg, color-mix(in srgb, var(--swatch-color, #d9eee1) 48%, #fff), color-mix(in srgb, var(--swatch-color, #d9eee1) 72%, #fff)); }
 .notes-art, .dashboard-art, .calendar-art, .studio-art, .library-art, .insights-art { height: 100%; }
 .notes-art { display: grid; grid-template-columns: 28px 1fr; gap: 15px; }
 .notes-art aside, .art-sidebar { display: flex; flex-direction: column; align-items: center; gap: 13px; border-right: 1px solid rgba(44,64,51,.11); padding-top: 3px; }
