@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowDown, ArrowUp, ExternalLink, ImagePlus, Plus, Save, Trash2, Upload } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowDown, ArrowUp, ChevronDown, ExternalLink, ImagePlus, Plus, Save, Trash2, Upload } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import type { Software, SoftwareBadgeStyle, SoftwarePriceType, SoftwareVisual } from "@/data/software";
 import { getSoftwareCardColor, softwareBadgeStyleOptions, softwareCardColorDefaults, softwareVisualOptions } from "@/data/software-options";
@@ -58,7 +58,7 @@ const blankSoftware = (slug: string): Software => ({
   name: "新建软件",
   tagline: "为作品写一句简短介绍。",
   description: "详细介绍这款软件，说明它解决的问题、适用场景和设计理念。",
-  category: "效率工具",
+  category: "",
   version: "1.0.0",
   updatedAt: new Date().toISOString().slice(0, 10),
   featured: false,
@@ -76,6 +76,51 @@ const blankSoftware = (slug: string): Software => ({
 
 function Field({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string; children: ReactNode }) {
   return <div className={"admin-field " + (error ? "is-invalid" : "")}><label className="admin-field-label" htmlFor={id}>{label}</label>{children}{hint && <span className="admin-field-hint">{hint}</span>}{error && <span className="admin-field-error" id={id + "-error"}>{error}</span>}</div>;
+}
+
+function EditableCategoryField({ id, value, options, error, onChange }: { id: string; value: string; options: string[]; error?: string; onChange: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const listboxId = id + "-options";
+  const normalizedValue = value.trim().toLocaleLowerCase("zh-CN");
+  const visibleOptions = options.filter((option) => !normalizedValue || option.toLocaleLowerCase("zh-CN").includes(normalizedValue));
+
+  useEffect(() => {
+    if (!open) return;
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => document.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, [open]);
+
+  return (
+    <div className="software-category-combobox" ref={containerRef}>
+      <div className="software-category-input-wrap">
+        <input
+          id={id}
+          data-validation-id={id}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? id + "-error" : undefined}
+          role="combobox"
+          aria-expanded={open}
+          aria-controls={listboxId}
+          value={value}
+          onFocus={() => setOpen(true)}
+          onChange={(event) => { onChange(event.target.value); setOpen(true); }}
+          maxLength={60}
+          placeholder="选择或输入分类，例如：效率工具"
+          autoComplete="off"
+        />
+        <button type="button" className="software-category-toggle" aria-label={open ? "收起分类列表" : "展开分类列表"} aria-expanded={open} onClick={() => setOpen((current) => !current)}>
+          <ChevronDown size={17} aria-hidden="true" />
+        </button>
+      </div>
+      {open && <div className="software-category-options" id={listboxId} role="listbox" aria-label="已有分类">
+        {visibleOptions.length ? visibleOptions.map((option) => <button type="button" role="option" aria-selected={option === value} className="software-category-option" key={option} onMouseDown={(event) => event.preventDefault()} onClick={() => { onChange(option); setOpen(false); }}>{option}</button>) : <span className="software-category-empty">暂无匹配分类，可直接输入新分类</span>}
+      </div>}
+    </div>
+  );
 }
 
 function ImageControl({ id, label, value, busy, error, onChange, onUpload }: { id: string; label: string; value?: string; busy: boolean; error?: string; onChange: (value: string) => void; onUpload: (file: File) => void }) {
@@ -99,6 +144,8 @@ export function SoftwareManager({ token }: { token: string }) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [focusTarget, setFocusTarget] = useState<{ itemIndex: number; fieldId: string; nonce: number } | null>(null);
   const selected = items[selectedIndex];
+  const categoryOptions = Array.from(new Set(items.map((item) => item.category.trim()).filter(Boolean)))
+    .sort((left, right) => left.localeCompare(right, "zh-CN"));
 
   useEffect(() => {
     if (!focusTarget || focusTarget.itemIndex !== selectedIndex) return;
@@ -247,7 +294,7 @@ export function SoftwareManager({ token }: { token: string }) {
             <Field id={fieldId("name")} label="作品名称" error={fieldError("name")}><input {...inputProps("name")} value={selected.name} onChange={(event) => updateSelected({ name: event.target.value })} maxLength={80} placeholder="例如：Mori Notes" /></Field>
             <Field id={fieldId("slug")} label="详情页地址标识" hint="只使用小写英文字母、数字和连字符；例如：mori-notes" error={fieldError("slug")}><input {...inputProps("slug")} value={selected.slug} onChange={(event) => updateSelected({ slug: event.target.value })} maxLength={60} placeholder="mori-notes" /></Field>
             <Field id={fieldId("tagline")} label="一句话副标题" error={fieldError("tagline")}><input {...inputProps("tagline")} value={selected.tagline} onChange={(event) => updateSelected({ tagline: event.target.value })} maxLength={140} placeholder="为作品写一句简短介绍" /></Field>
-            <Field id={fieldId("category")} label="分类" error={fieldError("category")}><input {...inputProps("category")} value={selected.category} onChange={(event) => updateSelected({ category: event.target.value })} maxLength={60} placeholder="例如：效率工具" /></Field>
+            <Field id={fieldId("category")} label="分类" hint="可选择已有分类，也可直接输入新分类" error={fieldError("category")}><EditableCategoryField id={fieldId("category")} value={selected.category} options={categoryOptions} error={fieldError("category")} onChange={(category) => updateSelected({ category })} /></Field>
             <Field id={fieldId("description")} label="详细介绍" hint="显示在作品卡片详情页头部" error={fieldError("description")}><textarea {...inputProps("description")} value={selected.description} onChange={(event) => updateSelected({ description: event.target.value })} rows={4} maxLength={1200} placeholder="介绍作品解决的问题、适用场景和设计理念" /></Field>
             <Field id={fieldId("storyTitle")} label="详情故事标题" error={fieldError("storyTitle")}><input {...inputProps("storyTitle")} value={selected.storyTitle || ""} onChange={(event) => updateSelected({ storyTitle: event.target.value })} maxLength={160} placeholder="留空则使用默认标题" /></Field>
             <Field id={fieldId("storyBody")} label="详情故事正文" error={fieldError("storyBody")}><textarea {...inputProps("storyBody")} value={selected.storyBody || ""} onChange={(event) => updateSelected({ storyBody: event.target.value })} rows={4} maxLength={1200} placeholder="留空则根据详细介绍自动生成" /></Field>

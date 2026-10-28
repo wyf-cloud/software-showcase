@@ -557,6 +557,15 @@ kbd { border: 1px solid var(--line); border-radius: 5px; background: var(--surfa
 .admin-field textarea { min-height: 86px; resize: vertical; line-height: 1.65; }
 .admin-field input:not([type="color"]):focus, .admin-field textarea:focus, .admin-field select:focus { border-color: var(--brand); background: var(--surface); box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 13%, transparent); }
 .admin-field input::placeholder, .admin-field textarea::placeholder { color: var(--muted); }
+.software-category-combobox { position: relative; }
+.software-category-input-wrap { position: relative; }
+.software-category-input-wrap input { padding-right: 42px !important; }
+.software-category-toggle { position: absolute; top: 50%; right: 7px; display: grid; width: 30px; height: 30px; place-items: center; transform: translateY(-50%); border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; }
+.software-category-toggle:hover, .software-category-toggle:focus-visible { background: var(--surface-soft); color: var(--brand); outline: 0; }
+.software-category-options { position: absolute; z-index: 20; top: calc(100% + 6px); right: 0; left: 0; max-height: 220px; overflow-y: auto; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--surface); padding: 5px; box-shadow: 0 14px 30px rgba(35, 55, 46, .14); }
+.software-category-option { display: block; width: 100%; border: 0; border-radius: 7px; background: transparent; color: var(--ink); cursor: pointer; padding: 9px 10px; text-align: left; font: inherit; font-size: 13px; }
+.software-category-option:hover, .software-category-option:focus-visible { background: var(--surface-soft); color: var(--brand); outline: 0; }
+.software-category-empty { display: block; padding: 9px 10px; color: var(--muted); font-size: 12px; }
 .admin-color-control { display: grid; grid-template-columns: 47px minmax(0, 1fr); gap: 9px; }
 .admin-color-control input[type="color"] { width: 47px; height: 43px; cursor: pointer; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--bg); padding: 4px; }
 .admin-switch { display: flex; align-items: center; gap: 11px; min-height: 58px; cursor: pointer; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 10px 12px; }
