@@ -14,8 +14,9 @@ type Props = { params: Promise<{ slug: string }> };
 
 export const dynamic = "force-dynamic";
 
-export function generateStaticParams() {
-  return software.map((item) => ({ slug: item.slug }));
+export async function generateStaticParams() {
+  const items = await readSoftware();
+  return items.map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
