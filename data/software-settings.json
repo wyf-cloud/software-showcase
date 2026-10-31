@@ -267,7 +267,7 @@
     "version": "1.0.0",
     "updatedAt": "2026-10-28",
     "featured": false,
-    "priceType": "paid",
+    "priceType": "free",
     "price": "",
     "badgeStyle": "orbit",
     "accent": "mint",
