@@ -17,6 +17,23 @@
       "popupDelaySeconds": 3,
       "popupFrequency": "every-open",
       "popupDailyLimit": 1
+    },
+    {
+      "id": "29d9434a-9021-464e-8c95-a1e0ab994e33",
+      "placement": "announcement",
+      "title": "测试",
+      "text": "测试测试测试测试测试测试",
+      "imageUrl": "",
+      "href": "",
+      "buttonText": "了解详情",
+      "enabled": true,
+      "order": 1,
+      "startsAt": "",
+      "endsAt": "",
+      "device": "all",
+      "popupDelaySeconds": 3,
+      "popupFrequency": "daily-limit",
+      "popupDailyLimit": 1
     }
   ]
 }
