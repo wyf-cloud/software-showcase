@@ -5,14 +5,15 @@ import { ProductVisual } from "@/components/product-visual";
 import { SoftwareLayout } from "@/components/software-layout";
 import { Reveal } from "@/components/motion";
 import { DemoNotice } from "@/components/demo-notice";
+import { AdvertisementBanner } from "@/components/advertisement-slots";
 import { readSoftware } from "@/lib/software-settings";
 import { readSiteSettings } from "@/lib/site-settings";
+import { readAdvertisements } from "@/lib/advertisements";
 
 const disciplines = ["WEB APPS", "DESKTOP TOOLS", "LITTLE EXPERIMENTS"];
 
 export default async function HomePage() {
-  const settings = await readSiteSettings();
-  const softwareItems = await readSoftware();
+  const [settings, softwareItems, advertisements] = await Promise.all([readSiteSettings(), readSoftware(), readAdvertisements()]);
   return (
     <main>
       <section className="hero-section">
@@ -54,6 +55,8 @@ export default async function HomePage() {
         </div>
         <SoftwareLayout items={softwareItems} layout={settings.softwareLayout} featured />
       </section>
+
+      <AdvertisementBanner ads={advertisements.ads} />
 
       <section className="practice-band">
         <div className="page-shell practice-layout">

@@ -279,5 +279,27 @@
     "screenshots": [],
     "demoUrl": "https://www.bilibili.com/video/BV1VZxV6wE27/?spm_id_from=333.1387.homepage.video_card.click&vd_source=2d514f68ec64eb141641afc92b4f9854",
     "downloadUrl": "https://pan.baidu.com/s/1hbwWD_DJSu40f7EuUcOa3A?pwd=v6xv"
+  },
+  {
+    "slug": "my-software-715382",
+    "name": "合同发票信息提取器",
+    "tagline": "为作品写一句简短介绍。",
+    "description": "合同发票信息提取器",
+    "category": "",
+    "version": "1.0.0",
+    "updatedAt": "2026-11-08",
+    "featured": false,
+    "priceType": "free",
+    "price": "",
+    "badgeStyle": "orbit",
+    "accent": "mint",
+    "cardColor": "#D8E0EE",
+    "visual": "notes",
+    "imageUrl": "/uploads/9690952e-6428-45f3-aec7-c543c4958a54.png",
+    "storyTitle": "",
+    "storyBody": "",
+    "screenshots": [],
+    "demoUrl": "https://www.bilibili.com/video/BV1tfW76FE1G/?vd_source=2d514f68ec64eb141641afc92b4f9854",
+    "downloadUrl": "https://pan.baidu.com/s/1YqC6jyE1AU2bq-ys1YTh0w?pwd=8ppy"
   }
 ]

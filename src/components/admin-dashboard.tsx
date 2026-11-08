@@ -1,8 +1,9 @@
 "use client";
 
-import { Activity, Check, CloudUpload, ExternalLink, LoaderCircle, LogIn, LogOut, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
+import { Activity, Check, CloudUpload, ExternalLink, LoaderCircle, LogIn, LogOut, Megaphone, RotateCcw, Save, Settings2, ShieldCheck } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
+import Link from "next/link";
 import type { SiteSettings } from "@/lib/site-settings";
 import { softwareLayoutOptions } from "@/lib/software-layout";
 import { SoftwareManager } from "@/components/software-manager";
@@ -236,7 +237,7 @@ export function AdminDashboard() {
           <h1>网站后台<span className="heading-dot">.</span></h1>
           <p>统一管理品牌信息、首页内容、主题颜色与互动效果。</p>
         </div>
-        <div className="admin-topline-mark"><Settings2 size={21} /><span>LOCAL<br />CONTROL</span></div>
+        <div className="admin-topline-actions"><Link href="/admin/ads" className="button button-outline"><Megaphone size={15} />广告管理</Link><div className="admin-topline-mark"><Settings2 size={21} /><span>LOCAL<br />CONTROL</span></div></div>
       </div>
 
       {!authenticated ? (

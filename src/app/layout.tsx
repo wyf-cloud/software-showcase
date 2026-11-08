@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { MotionProvider } from "@/components/motion";
+import { GlobalAdvertisementSlots } from "@/components/advertisement-slots";
 import { readSiteSettings } from "@/lib/site-settings";
+import { readAdvertisements } from "@/lib/advertisements";
 import "./globals.css";
 import "./visual-refresh.css";
 
@@ -27,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const settings = await readSiteSettings();
+  const [settings, advertisements] = await Promise.all([readSiteSettings(), readAdvertisements()]);
   const style = {
     "--site-primary": settings.primaryColor,
     "--site-accent": settings.accentColor,
@@ -38,6 +40,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body>
         <MotionProvider>
           <SiteHeader settings={settings} />
+          <GlobalAdvertisementSlots ads={advertisements.ads} />
           {children}
           <SiteFooter settings={settings} />
         </MotionProvider>

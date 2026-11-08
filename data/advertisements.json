@@ -2,11 +2,11 @@
   "version": 1,
   "ads": [
     {
-      "id": "12ff799c-3ee1-4a10-b416-1a8616913fe9",
+      "id": "961521c6-42c5-410e-a36f-16f5461b1d3e",
       "placement": "popup",
-      "title": "测试",
-      "text": "测试测试测试测试测试测试",
-      "imageUrl": "",
+      "title": "微信群",
+      "text": "欢迎加入《国网南网投标报价技术交流⑤群》",
+      "imageUrl": "/uploads/25a4bb4d-c913-4e27-b966-06308968f1f4.jpg",
       "href": "",
       "buttonText": "了解详情",
       "enabled": true,
@@ -14,25 +14,8 @@
       "startsAt": "",
       "endsAt": "",
       "device": "all",
-      "popupDelaySeconds": 3,
+      "popupDelaySeconds": 1,
       "popupFrequency": "every-open",
-      "popupDailyLimit": 1
-    },
-    {
-      "id": "29d9434a-9021-464e-8c95-a1e0ab994e33",
-      "placement": "announcement",
-      "title": "测试",
-      "text": "测试测试测试测试测试测试",
-      "imageUrl": "",
-      "href": "",
-      "buttonText": "了解详情",
-      "enabled": true,
-      "order": 1,
-      "startsAt": "",
-      "endsAt": "",
-      "device": "all",
-      "popupDelaySeconds": 3,
-      "popupFrequency": "daily-limit",
       "popupDailyLimit": 1
     }
   ]
