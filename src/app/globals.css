@@ -668,21 +668,13 @@ kbd { border: 1px solid var(--line); border-radius: 5px; background: var(--surfa
 .ads-admin-enabled { grid-column: 1 / -1; }
 .ads-admin-editor-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
 .ads-admin-editor-actions .is-danger { color: #a8483e; }
-.ads-admin-preview-card, .ads-publish-status { margin-top: 18px; }
+.ads-admin-preview-card { margin-top: 18px; }
 .ads-admin-preview { overflow: hidden; margin-top: 20px; border: 1px dashed var(--line-strong); border-radius: 14px; background: var(--bg); }
 .ads-admin-preview-content { display: grid; justify-items: center; gap: 9px; padding: 32px 18px; text-align: center; }
 .ads-admin-preview-content > img { width: min(100%, 560px); max-height: 200px; border-radius: 10px; object-fit: cover; }
 .ads-admin-preview-content > strong { font-size: 20px; }
 .ads-admin-preview-content > p { max-width: 600px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
 .ads-admin-preview-content > .button { margin-top: 7px; }
-.ads-publish-status { display: grid; gap: 14px; }
-.ads-publish-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; }
-.ads-publish-heading h2 { margin: 6px 0 0; font-size: 16px; }
-.ads-publish-heading > span { color: var(--muted); font: 12px "DM Mono", monospace; }
-.ads-publish-status.is-error .admin-github-sync-progress-track span { background: #bf594e; }
-.ads-publish-status.is-success .admin-github-sync-progress-track span { background: #329d67; }
-.ads-publish-status > .button { justify-self: start; }
-.ads-publish-note { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
 .announcement-ad-bar { position: relative; z-index: 20; overflow: hidden; border-bottom: 1px solid color-mix(in srgb, var(--brand) 20%, transparent); background: color-mix(in srgb, var(--brand) 8%, var(--surface)); color: var(--ink); }
 .announcement-ad-inner { display: flex; min-height: 40px; align-items: center; gap: 18px; }
 .announcement-ad-label { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 6px; color: var(--brand); font-size: 10px; font-weight: 800; letter-spacing: .06em; }

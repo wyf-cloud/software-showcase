@@ -152,7 +152,7 @@ export function AdminDashboard() {
   }
 
   async function syncToGitHub() {
-    if (!window.confirm("将把本机项目中所有未忽略的改动提交并推送到 GitHub（包括已有的未提交修改）。继续吗？")) return;
+    if (!window.confirm("将把本机项目中所有未忽略的改动（包括广告配置 data/advertisements.json 和广告素材 public/uploads/）一并提交并推送到 GitHub。继续吗？")) return;
     if (!token.trim()) {
       setAuthenticated(false);
       setStatus({ type: "error", message: "登录状态已失效，请重新输入管理员口令。" });
@@ -341,7 +341,7 @@ export function AdminDashboard() {
           <section className="admin-card admin-github-sync-card">
             <div className="admin-card-heading"><span className="admin-card-index">06</span><div><span className="eyebrow">VERSION CONTROL</span><h2>更新到 GitHub</h2></div></div>
             <div className="admin-github-sync-body">
-              <p className="admin-github-sync-description">点击按钮后，后台会把本机项目中所有未忽略的代码和资源变更加入 Git、创建提交并推送到当前分支的 <code>origin</code> 远程仓库。</p>
+              <p className="admin-github-sync-description">点击按钮后，后台会把本机项目中所有未忽略的代码和资源变更（包括广告配置 data/advertisements.json 与广告素材 public/uploads/）加入 Git、创建提交并推送到当前分支的 <code>origin</code> 远程仓库。</p>
               <div className="admin-github-sync-actions">
                 <button className="button button-dark" type="button" onClick={() => void syncToGitHub()} disabled={syncing || isStaticExport}>
                   {syncing ? <LoaderCircle className="admin-sync-spinner" size={16} /> : <CloudUpload size={16} />}
