@@ -1,4 +1,5 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
+import net from "node:net";
 import { NextResponse } from "next/server";
 import { getAdminToken } from "@/lib/site-settings";
 
@@ -51,36 +52,103 @@ function isSensitivePath(filePath: string) {
   return /\.(?:pem|p12|pfx|key)$/i.test(normalized);
 }
 
+/**
+ * 读取 Windows 系统代理（HKCU Internet Settings）。
+ * 返回类似 "http://127.0.0.1:12450" 的地址；未启用或读取失败时返回 null。
+ * 浏览器能访问 GitHub 而 git 连不上 443，通常就是系统代理开着但 git 没走代理，
+ * 这里自动检测并注入，保证两者行为一致。
+ */
+function readWindowsSystemProxy(): string | null {
+  if (process.platform !== "win32") return null;
+  try {
+    const key = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+    const enabled = spawnSync("reg", ["query", key, "/v", "ProxyEnable"], { encoding: "utf8", windowsHide: true, timeout: 3000 });
+    if (enabled.status !== 0 || !/ProxyEnable\s+REG_DWORD\s+0x1/i.test(enabled.stdout)) return null;
+    const server = spawnSync("reg", ["query", key, "/v", "ProxyServer"], { encoding: "utf8", windowsHide: true, timeout: 3000 });
+    const match = server.stdout.match(/ProxyServer\s+REG_SZ\s+(\S+)/i);
+    if (!match) return null;
+    let value = match[1];
+    // 支持 "http=host:port;https=host:port" 这种分协议格式，优先取 https
+    if (value.includes("=")) {
+      const entries = Object.fromEntries(value.split(";").map((part) => part.split("=", 2) as [string, string]));
+      value = entries.https || entries.http || Object.values(entries)[0] || "";
+    }
+    if (!value) return null;
+    return /^https?:\/\//i.test(value) ? value : `http://${value}`;
+  } catch {
+    return null;
+  }
+}
+
+/** 快速探测代理端口是否可连（代理软件可能已关闭），超时 1.5 秒视为不可用。 */
+function isProxyReachable(proxyUrl: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    try {
+      const { hostname, port } = new URL(proxyUrl);
+      const socket = net.connect({ host: hostname, port: Number(port) || 80, timeout: 1500 });
+      socket.once("connect", () => { socket.destroy(); resolve(true); });
+      socket.once("timeout", () => { socket.destroy(); resolve(false); });
+      socket.once("error", () => { socket.destroy(); resolve(false); });
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+/**
+ * 构造 git 命令行：检测到可用系统代理时用 -c 显式指定 http(s).proxy，
+ * 代理不可用时显式清空，避免全局 git config 里的过期代理把直连也拖垮。
+ * 命令行 -c 优先级高于全局配置，保证每次推送都按"当下"的网络环境执行。
+ */
+async function buildGitArgs(args: string[]): Promise<string[]> {
+  if (process.platform !== "win32") return args;
+  const proxy = readWindowsSystemProxy();
+  const reachable = proxy ? await isProxyReachable(proxy) : false;
+  const value = reachable && proxy ? proxy : "";
+  return ["-c", `http.proxy=${value}`, "-c", `https.proxy=${value}`, ...args];
+}
+
 function runGit(args: string[], onOutput?: (stream: "stdout" | "stderr", text: string) => void) {
   return new Promise<GitResult>((resolve, reject) => {
-    const child = spawn("git", args, {
-      cwd: process.cwd(),
-      env: {
-        ...process.env,
-        GIT_TERMINAL_PROMPT: "0",
-        GCM_INTERACTIVE: "auto",
-        GCM_GUI_PROMPT: "true",
-        GCM_PROVIDER: "github",
-        GCM_GITHUB_AUTHMODES: "browser",
-      },
-      windowsHide: true,
-    });
-    let stdout = "";
-    let stderr = "";
-
-    child.stdout.on("data", (chunk: Buffer) => {
-      const text = chunk.toString();
-      stdout += text;
-      onOutput?.("stdout", text);
-    });
-    child.stderr.on("data", (chunk: Buffer) => {
-      const text = chunk.toString();
-      stderr += text;
-      onOutput?.("stderr", text);
-    });
-    child.on("error", reject);
-    child.on("close", (code) => resolve({ code: code ?? 1, stdout, stderr }));
+    void (async () => {
+      const gitArgs = await buildGitArgs(args);
+      const child = spawn("git", gitArgs, {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          GIT_TERMINAL_PROMPT: "0",
+          GCM_INTERACTIVE: "auto",
+          GCM_GUI_PROMPT: "true",
+          GCM_PROVIDER: "github",
+          GCM_GITHUB_AUTHMODES: "browser",
+        },
+        windowsHide: true,
+      });
+      bindChild(child, resolve, onOutput);
+    })().catch(reject);
   });
+}
+
+function bindChild(
+  child: ReturnType<typeof spawn>,
+  resolve: (result: GitResult) => void,
+  onOutput?: (stream: "stdout" | "stderr", text: string) => void,
+) {
+  let stdout = "";
+  let stderr = "";
+
+  child.stdout?.on("data", (chunk: Buffer) => {
+    const text = chunk.toString();
+    stdout += text;
+    onOutput?.("stdout", text);
+  });
+  child.stderr?.on("data", (chunk: Buffer) => {
+    const text = chunk.toString();
+    stderr += text;
+    onOutput?.("stderr", text);
+  });
+  child.on("error", (error) => resolve({ code: 1, stdout, stderr: String(error) }));
+  child.on("close", (code) => resolve({ code: code ?? 1, stdout, stderr }));
 }
 
 function getOutputMessage(result: GitResult) {
