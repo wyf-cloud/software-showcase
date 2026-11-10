@@ -301,5 +301,26 @@
     "screenshots": [],
     "demoUrl": "https://www.bilibili.com/video/BV1tfW76FE1G/?vd_source=2d514f68ec64eb141641afc92b4f9854",
     "downloadUrl": "https://pan.baidu.com/s/1YqC6jyE1AU2bq-ys1YTh0w?pwd=8ppy"
+  },
+  {
+    "slug": "my-software-129965",
+    "name": "南方电网项目采集",
+    "tagline": "",
+    "description": "南方电网项目采集",
+    "category": "",
+    "version": "1.0.0",
+    "updatedAt": "2026-11-10",
+    "featured": false,
+    "priceType": "free",
+    "price": "",
+    "badgeStyle": "orbit",
+    "accent": "mint",
+    "cardColor": "#E2E9F8",
+    "visual": "notes",
+    "imageUrl": "/uploads/1099540f-4458-4164-a596-f5771b7f7ffb.png",
+    "storyTitle": "",
+    "storyBody": "",
+    "screenshots": [],
+    "downloadUrl": "https://pan.baidu.com/s/1gTPHphxFrGq1iAdDdxeoaw?pwd=1k43"
   }
 ]
