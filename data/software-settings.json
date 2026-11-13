@@ -343,5 +343,27 @@
     "storyBody": "",
     "screenshots": [],
     "downloadUrl": "https://pan.baidu.com/s/1megQUtBnMP3EqUXfUPCp3A?pwd=jvad"
+  },
+  {
+    "slug": "my-software-907278",
+    "name": "批量生成双层PDF软件",
+    "tagline": "为作品写一句简短介绍。",
+    "description": "批量生成双层PDF软件",
+    "category": "",
+    "version": "1.0.0",
+    "updatedAt": "2026-11-13",
+    "featured": false,
+    "priceType": "paid",
+    "price": "",
+    "badgeStyle": "orbit",
+    "accent": "mint",
+    "cardColor": "#EED8D8",
+    "visual": "notes",
+    "imageUrl": "/uploads/c2e3bd6e-07c9-45a2-9640-1dd46a072fe3.png",
+    "storyTitle": "",
+    "storyBody": "",
+    "screenshots": [],
+    "demoUrl": "https://www.bilibili.com/video/BV1dex56iEuh/?spm_id_from=333.1387.search.video_card.click&vd_source=2d514f68ec64eb141641afc92b4f9854",
+    "downloadUrl": "https://pan.baidu.com/s/1ngdQmxHAX4ODT5BL4euntQ?pwd=ucbd"
   }
 ]
